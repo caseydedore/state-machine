@@ -18,11 +18,12 @@ namespace StateMachineTesting.TestState
             Id = Guid.NewGuid();
         }
 
-        protected override bool UpdateState()
+        protected override Status UpdateState()
         {
             ++UpdateIterations;
 
-            return shouldComplete;
+            if (shouldComplete) return Status.Inactive;
+            return Status.Active;
         }
 
         protected override void Start()

@@ -1,6 +1,6 @@
 ﻿
-using StateMachineCore;
 using System;
+using System.Collections.Generic;
 
 namespace StateMachineCore
 {
@@ -16,5 +16,6 @@ namespace StateMachineCore
         void AddTransition(Func<bool> checkCondition, IState transitionState);
         void AddTransition(Func<bool> checkCondition, IState transitionState, TransitionBehavior behavior);
         void AddTransition(StateTransition transition);
+        void AddInverseTransition(IState state);
     }
 }

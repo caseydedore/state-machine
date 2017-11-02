@@ -12,6 +12,7 @@ namespace StateMachineCore
 
         private List<StateTransition> Transitions { get; set; }
         private IState transitionStateWaitingForEnd = null;
+        private List<IState> InverseTransitionStates { get; set; }
 
         private bool 
             hasTransitionedOut = false,
@@ -22,6 +23,7 @@ namespace StateMachineCore
         {
             StateMachine = machine;
             Transitions = new List<StateTransition>();
+            InverseTransitionStates = new List<IState>();
             Status = Status.Inactive;
         }
 
@@ -29,14 +31,15 @@ namespace StateMachineCore
         {
             if (Status != Status.Active)
             {
+                ExecuteInverseTransitions();
                 Status = Status.Active;
                 hasTransitionStateWaitingForEnd = false;
                 Start();
             }
 
-            if (UpdateState())
+            Status = UpdateState();
+            if (Status == Status.Inactive)
             {
-                Status = Status.Inactive;
                 End();
             }
 
@@ -53,7 +56,7 @@ namespace StateMachineCore
         protected virtual void Start() { }
         protected virtual void End() { }
 
-        protected abstract bool UpdateState();
+        protected abstract Status UpdateState();
 
         public void AddTransitionToEnd(Func<bool> checkCondition)
         {
@@ -80,6 +83,11 @@ namespace StateMachineCore
         public void AddTransition(StateTransition transition)
         {
             Transitions.Add(transition);
+        }
+
+        public void AddInverseTransition(IState state)
+        {
+            InverseTransitionStates.Add(state);
         }
 
         private bool CheckForTransitions()
@@ -188,6 +196,14 @@ namespace StateMachineCore
             }
 
             return false;
+        }
+
+        private void ExecuteInverseTransitions()
+        {
+            foreach(var state in InverseTransitionStates)
+            {
+                StateMachine.RemoveState(state);
+            }
         }
     }
 }
