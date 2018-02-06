@@ -42,9 +42,6 @@
   <ItemGroup>
     <Compile Include="Abstracts\AState.cs" />
     <Compile Include="StateMachine.cs" />
-    <Compile Include="BlackBoard.cs" />
-    <Compile Include="BlackBoardValue.cs" />
-    <Compile Include="Interfaces\IBlackBoard.cs" />
     <Compile Include="Interfaces\IState.cs" />
     <Compile Include="Interfaces\IStateMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
