@@ -8,13 +8,10 @@ namespace StateMachineTesting
     [TestClass]
     public class StateMachineTest
     {
-        private StateMachine machine = null;
-
-
         [TestMethod]
-        public void Transition()
+        public void TransitionSucceeds()
         {
-            machine = new StateMachine();
+            var machine = new StateMachine();
             var state = new State(machine);
             var nextState = new State(machine);
 
@@ -24,7 +21,23 @@ namespace StateMachineTesting
             machine.Update();
 
             Assert.AreEqual(1, machine.CurrentStates.Count);
-            Assert.AreEqual(nextState, machine.CurrentStates[0]);
+            Assert.AreSame(nextState, machine.CurrentStates[0]);
+        }
+
+        [TestMethod]
+        public void TransitionFails()
+        {
+            var machine = new StateMachine();
+            var state = new State(machine);
+            var transitionDestination = new State(machine);
+
+            machine.AddState(state);
+            state.AddTransition(() => { return false; }, transitionDestination);
+
+            machine.Update();
+
+            Assert.AreEqual(1, machine.CurrentStates.Count);
+            Assert.AreSame(state, machine.CurrentStates[0]);
         }
 
         [TestMethod]
@@ -32,7 +45,7 @@ namespace StateMachineTesting
         {
             var numberOfIterations = 10;
 
-            machine = new StateMachine();
+            var machine = new StateMachine();
             var state = new State(machine);
             machine.AddState(state);
 
@@ -47,7 +60,7 @@ namespace StateMachineTesting
         [TestMethod]
         public void Start()
         {
-            machine = new StateMachine();
+            var machine = new StateMachine();
             var state = new State(machine);
             machine.AddState(state);
 
@@ -59,7 +72,7 @@ namespace StateMachineTesting
         [TestMethod]
         public void StateEvents()
         {
-            machine = new StateMachine();
+            var machine = new StateMachine();
             var state = new State(machine);
             var nextState = new State(machine);
             machine.AddState(state);
@@ -75,7 +88,7 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionedStateEvents()
         {
-            machine = new StateMachine();
+            var machine = new StateMachine();
             var state = new State(machine);
             var nextState = new State(machine);
             machine.AddState(state);
@@ -88,6 +101,25 @@ namespace StateMachineTesting
             Assert.AreEqual(1, nextState.StartIterations);
             Assert.AreEqual(1, nextState.UpdateIterations);
             Assert.AreEqual(1, nextState.EndIterations);
+        }
+
+        [TestMethod]
+        public void TransitionFirstToSucceedIsUsed()
+        {
+            var machine = new StateMachine();
+            var runningState = new State(machine);
+            var firstPossibleState = new State(machine);
+            var nextState = new State(machine);
+            var lastPossibleState = new State(machine);
+            machine.AddState(runningState);
+            runningState.AddTransition(() => { return false; }, firstPossibleState);
+            runningState.AddTransition(() => { return true; }, nextState);
+            runningState.AddTransition(() => { return false; }, lastPossibleState);
+
+            machine.Update();
+
+            Assert.AreEqual(1, machine.CurrentStates.Count);
+            Assert.AreSame(nextState, machine.CurrentStates[0]);
         }
     }
 }
