@@ -13,8 +13,6 @@ namespace StateMachineCore
         private List<StateTransition> Transitions { get; set; }
         private IState transitionStateWaitingForEnd = null;
 
-        private bool hasTransitionStateWaitingForEnd = true;
-
 
         public AState(IStateMachine machine)
         {
@@ -28,7 +26,6 @@ namespace StateMachineCore
             if (Status != Status.Active)
             {
                 Status = Status.Active;
-                hasTransitionStateWaitingForEnd = false;
                 Start();
             }
 
