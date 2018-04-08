@@ -41,6 +41,24 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
+        public void TransitionsFail()
+        {
+            var machine = new StateMachine();
+            var currentState = new State(machine);
+            var transitionDestination = new State(machine);
+
+            machine.AddState(currentState);
+            currentState.AddTransition(() => { return false; }, transitionDestination);
+            currentState.AddTransition(() => { return false; }, transitionDestination);
+            currentState.AddTransition(() => { return false; }, transitionDestination);
+
+            machine.Update();
+
+            Assert.AreEqual(1, machine.CurrentStates.Count);
+            Assert.AreSame(currentState, machine.CurrentStates[0]);
+        }
+
+        [TestMethod]
         public void UpdateIterations()
         {
             var numberOfIterations = 10;
