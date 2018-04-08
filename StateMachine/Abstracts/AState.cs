@@ -12,18 +12,14 @@ namespace StateMachineCore
 
         private List<StateTransition> Transitions { get; set; }
         private IState transitionStateWaitingForEnd = null;
-        private List<IState> InverseTransitionStates { get; set; }
 
-        private bool 
-            hasTransitionedOut = false,
-            hasTransitionStateWaitingForEnd = true;
+        private bool hasTransitionStateWaitingForEnd = true;
 
 
         public AState(IStateMachine machine)
         {
             StateMachine = machine;
             Transitions = new List<StateTransition>();
-            InverseTransitionStates = new List<IState>();
             Status = Status.Inactive;
         }
 
@@ -31,7 +27,6 @@ namespace StateMachineCore
         {
             if (Status != Status.Active)
             {
-                ExecuteInverseTransitions();
                 Status = Status.Active;
                 hasTransitionStateWaitingForEnd = false;
                 Start();
@@ -43,7 +38,7 @@ namespace StateMachineCore
                 End();
             }
 
-            if (CheckForTransitions())
+            if (ExecuteTransitionIfAvailable())
             {
                 if (Status != Status.Inactive)
                 {
@@ -58,25 +53,15 @@ namespace StateMachineCore
 
         protected abstract Status UpdateState();
 
-        public void AddTransitionToEnd(Func<bool> checkCondition)
+        public void AddTransition(Func<bool> checkCondition)
         {
-            AddTransition(checkCondition, null, TransitionBehavior.EndState);
-        }
-
-        public void AddTransitionToEnd(Func<bool> checkCondition, TransitionBehavior behavior)
-        {
-            AddTransition(checkCondition, null, behavior);
+            AddTransition(checkCondition, null);
         }
 
         public void AddTransition(Func<bool> checkCondition, IState transitionState)
         {
-            AddTransition(checkCondition, transitionState, TransitionBehavior.EndState);
-        }
-
-        public void AddTransition(Func<bool> checkCondition, IState transitionState, TransitionBehavior behavior)
-        {
             var transition =
-                new StateTransition() { Condition = checkCondition, State = transitionState, Behavior = behavior };
+                new StateTransition() { Condition = checkCondition, State = transitionState };
             AddTransition(transition);
         }
 
@@ -85,125 +70,22 @@ namespace StateMachineCore
             Transitions.Add(transition);
         }
 
-        public void AddInverseTransition(IState state)
+        private bool ExecuteTransitionIfAvailable()
         {
-            InverseTransitionStates.Add(state);
-        }
-
-        private bool CheckForTransitions()
-        {
-            hasTransitionedOut = false;
-
-            if (!CheckForWaitingTransition())
+            foreach (var transition in Transitions)
             {
-                hasTransitionedOut = CheckPotentialTransitions();
-            }
-
-            return hasTransitionedOut;
-        } 
-
-        private bool CheckPotentialTransitions()
-        {
-            foreach (var t in Transitions)
-            {
-                if (t.Condition())
+                if (transition.Condition())
                 {
-                    if (t.Behavior == TransitionBehavior.DoNotEndState)
+                    if(transition.State != null)
                     {
-                        if (t.State != null)
-                        {
-                            StateMachine.AddState(t.State);
-                        }
+                        StateMachine.AddState(transition.State);
                     }
-                    else if (t.Behavior == TransitionBehavior.EndState)
-                    {
-                        if (t.State != null)
-                        {
-                            StateMachine.AddState(t.State);
-                        }
-
-                        StateMachine.RemoveState(this);
-                        return true;
-                    }
-                    else if (t.Behavior == TransitionBehavior.WaitForEndState)
-                    {
-                        hasTransitionStateWaitingForEnd = true;
-                        if (t.State != null)
-                        {
-                            transitionStateWaitingForEnd = t.State;
-                        }
-                    }
+                    StateMachine.RemoveState(this);
+                    return true;
                 }
             }
 
             return false;
-        }
-
-        private void HandleSuccessfulTransitionBasedOnBehavior(StateTransition t)
-        {
-            if (t.Behavior == TransitionBehavior.DoNotEndState)
-            {
-                if (t.State != null)
-                {
-                    StateMachine.AddState(t.State);
-                }
-            }
-            else if (t.Behavior == TransitionBehavior.EndState)
-            {
-                if (t.State != null)
-                {
-                    StateMachine.AddState(t.State);
-                }
-
-                StateMachine.RemoveState(this);
-                hasTransitionedOut = true;
-            }
-            else if (t.Behavior == TransitionBehavior.WaitForEndState)
-            {
-                hasTransitionStateWaitingForEnd = true;
-                if (t.State != null)
-                {
-                    transitionStateWaitingForEnd = t.State;
-                }
-            }
-        }
-
-        private bool CheckIsTransitionExclusive(StateTransition transition)
-        {
-            if(transition.Behavior == TransitionBehavior.DoNotEndState)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool CheckForWaitingTransition()
-        {
-            if (hasTransitionStateWaitingForEnd && Status == Status.Inactive)
-            {
-                hasTransitionedOut = true;
-                StateMachine.RemoveState(this);
-                if(transitionStateWaitingForEnd != null)
-                {
-                    StateMachine.AddState(transitionStateWaitingForEnd);
-                }
-                return true;
-            }
-            else if (hasTransitionStateWaitingForEnd)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        private void ExecuteInverseTransitions()
-        {
-            foreach(var state in InverseTransitionStates)
-            {
-                StateMachine.RemoveState(state);
-            }
         }
     }
 }

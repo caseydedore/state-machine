@@ -11,11 +11,8 @@ namespace StateMachineCore
 
 
         void Update();
-        void AddTransitionToEnd(Func<bool> checkCondition);
-        void AddTransitionToEnd(Func<bool> checkCondition, TransitionBehavior behavior);
+        void AddTransition(Func<bool> checkCondition);
         void AddTransition(Func<bool> checkCondition, IState transitionState);
-        void AddTransition(Func<bool> checkCondition, IState transitionState, TransitionBehavior behavior);
         void AddTransition(StateTransition transition);
-        void AddInverseTransition(IState state);
     }
 }
