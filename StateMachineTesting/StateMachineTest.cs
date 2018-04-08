@@ -58,12 +58,25 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
-        public void Start()
+        public void StartEvent()
         {
             var machine = new StateMachine();
             var state = new State(machine);
             machine.AddState(state);
 
+            machine.Update();
+
+            Assert.AreEqual(1, state.StartIterations);
+        }
+
+        [TestMethod]
+        public void StartEventOnlyOnce()
+        {
+            var machine = new StateMachine();
+            var state = new State(machine);
+            machine.AddState(state);
+
+            machine.Update();
             machine.Update();
 
             Assert.AreEqual(1, state.StartIterations);
