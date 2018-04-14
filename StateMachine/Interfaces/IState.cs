@@ -13,6 +13,7 @@ namespace StateMachineCore
         void Update();
         void AddTransition(Func<bool> checkCondition);
         void AddTransition(Func<bool> checkCondition, IState transitionState);
+        void AddTransition(Func<bool> checkCondition, IState[] transitionStates);
         void AddTransition(StateTransition transition);
     }
 }

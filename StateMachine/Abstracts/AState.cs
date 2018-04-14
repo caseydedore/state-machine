@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StateMachineCore
 {
@@ -52,13 +53,23 @@ namespace StateMachineCore
 
         public void AddTransition(Func<bool> checkCondition)
         {
-            AddTransition(checkCondition, null);
+            AddTransition(checkCondition, new IState[] { });
         }
 
         public void AddTransition(Func<bool> checkCondition, IState transitionState)
         {
+            var transitionStates = new IState[] { transitionState };
+            AddTransition(checkCondition, transitionStates);
+        }
+
+        public void AddTransition(Func<bool> checkCondition, IState[] transitionStates)
+        {
             var transition =
-                new StateTransition() { Condition = checkCondition, State = transitionState };
+                new StateTransition()
+                {
+                    Condition = checkCondition,
+                    States = transitionStates
+                };
             AddTransition(transition);
         }
 
@@ -69,19 +80,13 @@ namespace StateMachineCore
 
         private bool ExecuteTransitionIfAvailable()
         {
-            foreach (var transition in Transitions)
+            var firstSuccessfulTransition = Transitions.Where(t => t.Condition()).FirstOrDefault();
+            if(firstSuccessfulTransition != null)
             {
-                if (transition.Condition())
-                {
-                    if(transition.State != null)
-                    {
-                        StateMachine.AddState(transition.State);
-                    }
-                    StateMachine.RemoveState(this);
-                    return true;
-                }
+                StateMachine.RemoveState(this);
+                firstSuccessfulTransition.States.ToList().ForEach(state => { StateMachine.AddState(state); } );
+                return true;
             }
-
             return false;
         }
     }

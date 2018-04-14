@@ -152,5 +152,22 @@ namespace StateMachineTesting
             Assert.AreEqual(1, machine.CurrentStates.Count);
             Assert.AreSame(nextState, machine.CurrentStates[0]);
         }
+
+        [TestMethod]
+        public void TransitionToMultiple()
+        {
+            var machine = new StateMachine();
+            var currentState = new State(machine);
+            var destinationA = new State(machine);
+            var destinationB = new State(machine);
+            machine.AddState(currentState);
+            currentState.AddTransition(() => { return true; }, new IState[] { destinationA, destinationB });
+
+            machine.Update();
+
+            Assert.AreEqual(2, machine.CurrentStates.Count);
+            Assert.AreSame(destinationA, machine.CurrentStates[0]);
+            Assert.AreSame(destinationB, machine.CurrentStates[1]);
+        }
     }
 }
