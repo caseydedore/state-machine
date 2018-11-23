@@ -1,17 +1,17 @@
 ﻿
 using System;
-using System.Collections.Generic;
 
 namespace StateMachineCore
 {
     public class StateTransition
     {
-        public Func<bool> Condition { get; set; }
-        public IState[] States { get; set; }
+        public Func<bool> Condition { get; }
+        public IState State { get; }
 
-        public StateTransition()
+        public StateTransition(Func<bool> condition, IState state)
         {
-            States = new IState[] { };
+            Condition = condition;
+            State = state;
         }
     }
 }

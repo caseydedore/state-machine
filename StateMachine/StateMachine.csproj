@@ -46,8 +46,6 @@
     <Compile Include="Interfaces\IState.cs" />
     <Compile Include="Interfaces\IStateMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StateResult.cs" />
-    <Compile Include="StateStatus.cs" />
     <Compile Include="StateTransition.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

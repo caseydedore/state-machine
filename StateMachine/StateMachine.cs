@@ -1,67 +1,36 @@
 
-using System.Collections.Generic;
-
 namespace StateMachineCore
 {
-
 	public class StateMachine : IStateMachine
 	{
-        public List<IState> CurrentStates { get { return currentStates; } protected set { currentStates = value; } }
-        private List<IState> currentStates = new List<IState>();
-        private List<IState> statesToAdd = new List<IState>();
-        private List<IState> statesToRemove = new List<IState>();
-
-        private bool isInUpdate = false;
-
+        private IState currentState;
+        private IState entry;
+        private IState nextState;
 
         public void Update()
         {
-            isInUpdate = true;
-            foreach (var s in currentStates)
+            if (nextState != null)
             {
-                s.Update();
+                currentState = nextState;
+                nextState = null;
+                currentState?.Start();
             }
-            isInUpdate = false;
-
-            UpdateCurrentStates();
-        }
-
-        private void UpdateCurrentStates()
-        {
-            foreach(var s in statesToRemove)
+            var transition = currentState?.Update();
+            if (transition != null)
             {
-                currentStates.Remove(s);
-            }
-            statesToRemove.Clear();
-
-            foreach(var s in statesToAdd)
-            {
-                currentStates.Add(s);
-            }
-            statesToAdd.Clear();
-        }
-
-        public void AddState(IState state)
-        {
-            if (isInUpdate)
-            {
-                statesToAdd.Add(state);
-            }
-            else
-            {
-                currentStates.Add(state);
+                currentState?.End();
+                currentState = null;
+                nextState = transition.State;
             }
         }
 
-        public void RemoveState(IState state)
+        public IState Entry
         {
-            if (isInUpdate)
+            get { return entry; }
+            set
             {
-                statesToRemove.Add(state);
-            }
-            else
-            {
-                currentStates.Remove(state);
+                entry = value;
+                nextState = entry;
             }
         }
     }
