@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Abstracts\AState.cs" />
+    <Compile Include="Core\State.cs" />
     <Compile Include="Core\StateMachine.cs" />
     <Compile Include="Core\Interfaces\IState.cs" />
     <Compile Include="Core\Interfaces\IStateMachine.cs" />

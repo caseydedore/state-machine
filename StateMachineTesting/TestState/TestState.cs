@@ -1,9 +1,9 @@
 ﻿
 using StateMachineCore;
 
-namespace StateMachineTesting.TestState
+namespace StateMachineTesting
 {
-    public class State : AState
+    public class TestState : State
     {
         public int UpdateIterations { get; protected set; }
         public int StartIterations { get; protected set; }

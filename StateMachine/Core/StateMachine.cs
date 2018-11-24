@@ -3,8 +3,9 @@ namespace StateMachineCore
 {
 	public class StateMachine : IStateMachine
 	{
-        private IState currentState;
         private IState entry;
+        private IState any = new State();
+        private IState currentState;
         private IState nextState;
 
         public void Update()
@@ -13,9 +14,9 @@ namespace StateMachineCore
             {
                 currentState = nextState;
                 nextState = null;
-                currentState?.Start();
+                currentState.Start();
             }
-            var transition = currentState?.Update();
+            var transition = currentState?.Update() ?? any.Update();
             if (transition != null)
             {
                 currentState?.End();
@@ -33,7 +34,11 @@ namespace StateMachineCore
                 nextState = entry;
             }
         }
-    }
 
+        public IState Any
+        {
+            get { return any; }
+        }
+    }
 }
 

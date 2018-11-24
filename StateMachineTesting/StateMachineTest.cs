@@ -1,7 +1,6 @@
 ﻿
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StateMachineCore;
-using StateMachineTesting.TestState;
 
 namespace StateMachineTesting
 {
@@ -12,7 +11,7 @@ namespace StateMachineTesting
         public void OneStateUpdate()
         {
             var machine = new StateMachine();
-            var state = new State();
+            var state = new TestState();
             machine.Entry = state;
 
             machine.Update();
@@ -26,7 +25,7 @@ namespace StateMachineTesting
         public void OneStateUpdates()
         {
             var machine = new StateMachine();
-            var state = new State();
+            var state = new TestState();
             var iterations = 42;
             machine.Entry = state;
 
@@ -46,8 +45,8 @@ namespace StateMachineTesting
         public void TransitionSuccess()
         {
             var machine = new StateMachine();
-            var first = new State();
-            var next = new State();
+            var first = new TestState();
+            var next = new TestState();
             var transition = new StateTransition(() => { return true; }, next);
             first.AddTransition(transition);
             machine.Entry = first;
@@ -64,7 +63,7 @@ namespace StateMachineTesting
         public void TransitionIsChecked()
         {
             var machine = new StateMachine();
-            var state = new State();
+            var state = new TestState();
             var didCheckTransition = false;
             var transition = new StateTransition(() =>
                 {
@@ -84,8 +83,8 @@ namespace StateMachineTesting
         public void TransitionFailure()
         {
             var machine = new StateMachine();
-            var first = new State();
-            var next = new State();
+            var first = new TestState();
+            var next = new TestState();
             var transition = new StateTransition(() => { return false; }, next);
             first.AddTransition(transition);
             machine.Entry = first;
@@ -99,8 +98,8 @@ namespace StateMachineTesting
         public void TransitionFailures()
         {
             var machine = new StateMachine();
-            var first = new State();
-            var next = new State();
+            var first = new TestState();
+            var next = new TestState();
             var transition = new StateTransition(() => { return false; }, next);
             first.AddTransition(transition);
             machine.Entry = first;
@@ -121,9 +120,9 @@ namespace StateMachineTesting
         public void TransitionFirstSuccess()
         {
             var machine = new StateMachine();
-            var start = new State();
-            var destination = new State();
-            var secondDestination = new State();
+            var start = new TestState();
+            var destination = new TestState();
+            var secondDestination = new TestState();
             var fail = new StateTransition(() => { return true; }, destination);
             var succeed = new StateTransition(() => { return false; }, secondDestination);
             start.AddTransition(fail);
@@ -142,9 +141,9 @@ namespace StateMachineTesting
         public void TransitionSecondSuccess()
         {
             var machine = new StateMachine();
-            var start = new State();
-            var attemptedDestination = new State();
-            var destination = new State();
+            var start = new TestState();
+            var attemptedDestination = new TestState();
+            var destination = new TestState();
             var fail = new StateTransition(() => { return false; }, attemptedDestination);
             var succeed = new StateTransition(() => { return true; }, destination);
             start.AddTransition(fail);
@@ -163,8 +162,8 @@ namespace StateMachineTesting
         public void TransitionBackAndForth()
         {
             var machine = new StateMachine();
-            var first = new State();
-            var second = new State();
+            var first = new TestState();
+            var second = new TestState();
             var firstTransition = new StateTransition(() => { return true; }, second);
             var secondTransition = new StateTransition(() => { return true; }, first);
             first.AddTransition(firstTransition);
@@ -184,9 +183,9 @@ namespace StateMachineTesting
         public void MultipleTransitionsSucceed()
         {
             var machine = new StateMachine();
-            var first = new State();
-            var destination = new State();
-            var lastDestination = new State();
+            var first = new TestState();
+            var destination = new TestState();
+            var lastDestination = new TestState();
             var firstTransition = new StateTransition(() => { return true; }, destination);
             var secondTransition = new StateTransition(() => { return true; }, lastDestination);
             first.AddTransition(firstTransition);
@@ -202,11 +201,11 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
-        public void TransitionSucceedsAfterFailure()
+        public void TransitionSuccessAfterFailure()
         {
             var machine = new StateMachine();
-            var state = new State();
-            var destination = new State();
+            var state = new TestState();
+            var destination = new TestState();
             var willTransitionSucceed = false;
             var transition = new StateTransition(() => { return willTransitionSucceed; }, destination);
             state.AddTransition(transition);

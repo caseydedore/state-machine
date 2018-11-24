@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace StateMachineCore
 {
-    public abstract class AState : IState
+    public class State : IState
     {
         private List<StateTransition> Transitions { get; set; } = new List<StateTransition>();
 
@@ -17,8 +17,7 @@ namespace StateMachineCore
 
         public virtual void Start() { }
         public virtual void End() { }
-
-        protected abstract void UpdateState();
+        protected virtual void UpdateState() { }
 
         public void AddTransition(Func<bool> checkCondition, IState transitionState)
         {
