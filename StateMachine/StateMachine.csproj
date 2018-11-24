@@ -41,12 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstracts\AState.cs" />
-    <Compile Include="StateMachine.cs" />
-    <Compile Include="Interfaces\IState.cs" />
-    <Compile Include="Interfaces\IStateMachine.cs" />
+    <Compile Include="Core\Abstracts\AState.cs" />
+    <Compile Include="Core\StateMachine.cs" />
+    <Compile Include="Core\Interfaces\IState.cs" />
+    <Compile Include="Core\Interfaces\IStateMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StateTransition.cs" />
+    <Compile Include="Core\StateTransition.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
