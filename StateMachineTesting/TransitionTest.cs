@@ -5,16 +5,17 @@ using StateMachineCore;
 namespace StateMachineTesting
 {
     [TestClass]
-    public class StateMachineTest
+    public class TransitionTest
     {
         [TestMethod]
         public void OneStateUpdate()
         {
-            var machine = new StateMachine();
+            var group = new TestStateGroup();
             var state = new TestState();
-            machine.Entry = state;
+            group.Entry = state;
 
-            machine.Update();
+            group.Start();
+            group.Update();
 
             Assert.AreEqual(1, state.StartIterations);
             Assert.AreEqual(1, state.UpdateIterations);
@@ -24,16 +25,17 @@ namespace StateMachineTesting
         [TestMethod]
         public void OneStateUpdates()
         {
-            var machine = new StateMachine();
+            var group = new TestStateGroup();
             var state = new TestState();
             var iterations = 42;
-            machine.Entry = state;
+            group.Entry = state;
 
+            group.Start();
             var current = 0;
             while (current < iterations)
             {
                 current++;
-                machine.Update();
+                group.Update();
             }
 
             Assert.AreEqual(1, state.StartIterations);
@@ -44,15 +46,16 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionSuccess()
         {
-            var machine = new StateMachine();
+            var group = new TestStateGroup();
             var first = new TestState();
             var next = new TestState();
             var transition = new StateTransition(() => { return true; }, next);
             first.AddTransition(transition);
-            machine.Entry = first;
+            group.Entry = first;
 
-            machine.Update();
-            machine.Update();
+            group.Start();
+            group.Update();
+            group.Update();
 
             Assert.AreEqual(1, first.EndIterations);
             Assert.AreEqual(1, next.StartIterations);
@@ -62,7 +65,7 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionIsChecked()
         {
-            var machine = new StateMachine();
+            var group = new TestStateGroup();
             var state = new TestState();
             var didCheckTransition = false;
             var transition = new StateTransition(() =>
@@ -72,9 +75,10 @@ namespace StateMachineTesting
                 },
                 state);
             state.AddTransition(transition);
-            machine.Entry = state;
+            group.Entry = state;
 
-            machine.Update();
+            group.Start();
+            group.Update();
 
             Assert.IsTrue(didCheckTransition);
         }
@@ -82,14 +86,15 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionFailure()
         {
-            var machine = new StateMachine();
+            var group = new TestStateGroup();
             var first = new TestState();
             var next = new TestState();
             var transition = new StateTransition(() => { return false; }, next);
             first.AddTransition(transition);
-            machine.Entry = first;
+            group.Entry = first;
 
-            machine.Update();
+            group.Start();
+            group.Update();
 
             Assert.AreEqual(0, first.EndIterations);
         }
@@ -97,18 +102,19 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionFailures()
         {
-            var machine = new StateMachine();
+            var group = new TestStateGroup();
             var first = new TestState();
             var next = new TestState();
             var transition = new StateTransition(() => { return false; }, next);
             first.AddTransition(transition);
-            machine.Entry = first;
+            group.Entry = first;
 
+            group.Start();
             var iteration = 0;
             while (iteration < 13)
             {
                 iteration++;
-                machine.Update();
+                group.Update();
             }
 
             Assert.AreEqual(1, first.StartIterations);
@@ -119,7 +125,7 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionFirstSuccess()
         {
-            var machine = new StateMachine();
+            var group = new TestStateGroup();
             var start = new TestState();
             var destination = new TestState();
             var secondDestination = new TestState();
@@ -127,10 +133,11 @@ namespace StateMachineTesting
             var succeed = new StateTransition(() => { return false; }, secondDestination);
             start.AddTransition(fail);
             start.AddTransition(succeed);
-            machine.Entry = start;
+            group.Entry = start;
 
-            machine.Update();
-            machine.Update();
+            group.Start();
+            group.Update();
+            group.Update();
 
             Assert.AreEqual(1, start.UpdateIterations);
             Assert.AreEqual(1, destination.UpdateIterations);
@@ -140,7 +147,7 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionSecondSuccess()
         {
-            var machine = new StateMachine();
+            var group = new TestStateGroup();
             var start = new TestState();
             var attemptedDestination = new TestState();
             var destination = new TestState();
@@ -148,10 +155,11 @@ namespace StateMachineTesting
             var succeed = new StateTransition(() => { return true; }, destination);
             start.AddTransition(fail);
             start.AddTransition(succeed);
-            machine.Entry = start;
+            group.Entry = start;
 
-            machine.Update();
-            machine.Update();
+            group.Start();
+            group.Update();
+            group.Update();
 
             Assert.AreEqual(0, attemptedDestination.StartIterations);
             Assert.AreEqual(1, destination.StartIterations);
@@ -161,19 +169,20 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionBackAndForth()
         {
-            var machine = new StateMachine();
+            var group = new TestStateGroup();
             var first = new TestState();
             var second = new TestState();
             var firstTransition = new StateTransition(() => { return true; }, second);
             var secondTransition = new StateTransition(() => { return true; }, first);
             first.AddTransition(firstTransition);
             second.AddTransition(secondTransition);
-            machine.Entry = first;
+            group.Entry = first;
 
-            machine.Update();
-            machine.Update();
-            machine.Update();
-            machine.Update();
+            group.Start();
+            group.Update();
+            group.Update();
+            group.Update();
+            group.Update();
 
             Assert.AreEqual(2, first.UpdateIterations);
             Assert.AreEqual(2, second.UpdateIterations);
@@ -182,7 +191,7 @@ namespace StateMachineTesting
         [TestMethod]
         public void MultipleTransitionsSucceed()
         {
-            var machine = new StateMachine();
+            var group = new TestStateGroup();
             var first = new TestState();
             var destination = new TestState();
             var lastDestination = new TestState();
@@ -190,10 +199,11 @@ namespace StateMachineTesting
             var secondTransition = new StateTransition(() => { return true; }, lastDestination);
             first.AddTransition(firstTransition);
             first.AddTransition(secondTransition);
-            machine.Entry = first;
+            group.Entry = first;
 
-            machine.Update();
-            machine.Update();
+            group.Start();
+            group.Update();
+            group.Update();
 
             Assert.AreEqual(1, destination.StartIterations);
             Assert.AreEqual(1, destination.UpdateIterations);
@@ -203,17 +213,18 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionSuccessAfterFailure()
         {
-            var machine = new StateMachine();
+            var group = new TestStateGroup();
             var state = new TestState();
             var destination = new TestState();
             var willTransitionSucceed = false;
             var transition = new StateTransition(() => { return willTransitionSucceed; }, destination);
             state.AddTransition(transition);
-            machine.Entry = state;
+            group.Entry = state;
 
-            machine.Update();
+            group.Start();
+            group.Update();
             willTransitionSucceed = true;
-            machine.Update();
+            group.Update();
 
             Assert.AreEqual(2, state.UpdateIterations);
             Assert.AreEqual(0, destination.StartIterations);

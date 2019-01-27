@@ -51,8 +51,12 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AnyStateTest.cs" />
-    <Compile Include="StateMachineTest.cs" />
+    <Compile Include="IntegrationTest.cs" />
+    <Compile Include="StateGroupTest.cs" />
+    <Compile Include="TestState\TestStateGroup.cs" />
+    <Compile Include="TransitionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StateTest.cs" />
     <Compile Include="TestState\TestState.cs" />
   </ItemGroup>
   <ItemGroup>

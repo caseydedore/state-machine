@@ -1,14 +1,12 @@
 
 namespace StateMachineCore
 {
-	public class StateMachine : IStateMachine
+	public abstract class StateGroup : State
 	{
-        private IState entry;
-        private IState any = new State();
         private IState currentState;
         private IState nextState;
 
-        public void Update()
+        protected override void UpdateState()
         {
             if (nextState != null)
             {
@@ -16,7 +14,7 @@ namespace StateMachineCore
                 nextState = null;
                 currentState.Start();
             }
-            var transition = currentState?.Update() ?? any.Update();
+            var transition = currentState?.Update() ?? Any.Update();
             if (transition != null)
             {
                 currentState?.End();
@@ -25,20 +23,20 @@ namespace StateMachineCore
             }
         }
 
-        public IState Entry
+        public override void Start()
         {
-            get { return entry; }
-            set
-            {
-                entry = value;
-                nextState = entry;
-            }
+            nextState = Entry;
         }
 
-        public IState Any
+        public override void End()
         {
-            get { return any; }
+            currentState?.End();
+            nextState = null;
+            currentState = null;
         }
+
+        protected IState Entry { get; set; }
+        protected IState Any { get; } = new BlankState();
     }
 }
 

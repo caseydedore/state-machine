@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace StateMachineCore
 {
-    public class State : IState
+    public abstract class State : IState
     {
         private List<StateTransition> Transitions { get; set; } = new List<StateTransition>();
 
