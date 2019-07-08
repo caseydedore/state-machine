@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Blackboard\Blackboard.cs" />
     <Compile Include="Core\BlankState.cs" />
     <Compile Include="Core\State.cs" />
     <Compile Include="Core\StateGroup.cs" />
