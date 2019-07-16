@@ -1,5 +1,5 @@
 ﻿
-using StateMachine.Core.Blackboard;
+using StateMachineCore;
 using System.Collections.Generic;
 
 namespace StateMachineTesting

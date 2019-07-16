@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace StateMachine.Core.Blackboard
+namespace StateMachineCore
 {
     public class Blackboard
     {
