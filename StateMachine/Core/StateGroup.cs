@@ -1,7 +1,7 @@
 
 namespace StateMachineCore
 {
-	public abstract class StateGroup : State
+	public abstract class StateGroup : StateCore
 	{
         private IState currentState;
         private IState nextState;

@@ -53,6 +53,7 @@
     <Compile Include="AnyStateTest.cs" />
     <Compile Include="BlackboardTest.cs" />
     <Compile Include="IntegrationTest.cs" />
+    <Compile Include="StateBlackboardTest.cs" />
     <Compile Include="StateGroupTest.cs" />
     <Compile Include="TestBlackboard\TestBlackboard.cs" />
     <Compile Include="TestState\TestStateGroup.cs" />

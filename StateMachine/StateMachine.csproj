@@ -44,6 +44,7 @@
     <Compile Include="Core\Blackboard\Blackboard.cs" />
     <Compile Include="Core\BlankState.cs" />
     <Compile Include="Core\State.cs" />
+    <Compile Include="Core\StateCore.cs" />
     <Compile Include="Core\StateGroup.cs" />
     <Compile Include="Core\Interfaces\IState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
