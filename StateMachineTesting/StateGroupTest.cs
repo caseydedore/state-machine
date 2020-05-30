@@ -111,5 +111,21 @@ namespace StateMachineTesting
             Assert.AreEqual(0, state.UpdateIterations);
             Assert.AreEqual(0, state.EndIterations);
         }
+
+        [TestMethod]
+        public void LifecycleEvents()
+        {
+            var group = new TestStateGroup();
+            var state = new TestState();
+            group.Entry = state;
+
+            group.Start();
+            group.Update();
+            group.End();
+
+            Assert.AreEqual(1, group.StartIterations);
+            Assert.AreEqual(1, state.UpdateIterations);
+            Assert.AreEqual(1, group.EndIterations);
+        }
     }
 }

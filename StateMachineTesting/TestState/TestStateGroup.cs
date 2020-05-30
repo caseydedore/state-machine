@@ -24,5 +24,12 @@ namespace StateMachineTesting
                 return base.Any;
             }
         }
+
+        public int StartIterations { get; protected set; }
+        public int EndIterations { get; protected set; }
+
+        protected override void StartState() => ++StartIterations;
+
+        protected override void EndState() => ++EndIterations;
     }
 }

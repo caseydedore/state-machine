@@ -6,7 +6,7 @@ namespace StateMachineCore
         private IState currentState;
         private IState nextState;
 
-        protected override void UpdateState()
+        protected sealed override void UpdateState()
         {
             if (nextState != null)
             {
@@ -23,13 +23,15 @@ namespace StateMachineCore
             }
         }
 
-        public override void Start()
+        public sealed override void Start()
         {
+            StartState();
             nextState = Entry;
         }
 
-        public override void End()
+        public sealed override void End()
         {
+            EndState();
             currentState?.End();
             nextState = null;
             currentState = null;
@@ -37,6 +39,8 @@ namespace StateMachineCore
 
         protected IState Entry { get; set; }
         protected IState Any { get; } = new BlankState();
+        protected virtual void StartState() { }
+        protected virtual void EndState() { }
     }
 }
 
