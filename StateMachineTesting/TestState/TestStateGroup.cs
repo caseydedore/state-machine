@@ -6,24 +6,11 @@ namespace StateMachineTesting
     {
         public new IState Entry
         {
-            get
-            {
-                return base.Entry;
-            }
-            
-            set
-            {
-                base.Entry = value;
-            }
+            get => base.Entry;
+            set => base.Entry = value;
         }
 
-        public new IState Any
-        {
-            get
-            {
-                return base.Any;
-            }
-        }
+        public new IState Any => base.Any;
 
         public int StartIterations { get; protected set; }
         public int EndIterations { get; protected set; }

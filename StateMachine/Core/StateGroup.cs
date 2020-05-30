@@ -3,8 +3,8 @@ namespace StateMachineCore
 {
 	public abstract class StateGroup : State
 	{
-        private IState currentState;
-        private IState nextState;
+        IState currentState;
+        IState nextState;
 
         protected sealed override void UpdateState()
         {

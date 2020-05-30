@@ -7,7 +7,7 @@ namespace StateMachineCore
 {
     public abstract class State : IState
     {
-        private List<StateTransition> Transitions { get; set; } = new List<StateTransition>();
+        List<StateTransition> Transitions { get; set; } = new List<StateTransition>();
 
         public StateTransition Update()
         {
@@ -25,14 +25,10 @@ namespace StateMachineCore
             AddTransition(transition);
         }
 
-        public void AddTransition(StateTransition transition)
-        {
+        public void AddTransition(StateTransition transition) =>
             Transitions.Add(transition);
-        }
 
-        private StateTransition GetFirstSuccessfulTransition()
-        {
-            return Transitions.Where(t => t.Condition()).FirstOrDefault();
-        }
+        StateTransition GetFirstSuccessfulTransition() => 
+            Transitions.Where(t => t.Condition()).FirstOrDefault();
     }
 }
