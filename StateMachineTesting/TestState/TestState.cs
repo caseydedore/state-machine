@@ -9,10 +9,11 @@ namespace StateMachineTesting
         public int StartIterations { get; protected set; }
         public int EndIterations { get; protected set; }
 
-        protected override void UpdateState() => ++UpdateIterations;
-
-        public override void Start() => ++StartIterations;
-
-        public override void End() => ++EndIterations;
+        public TestState()
+        {
+            UpdateState += () => ++UpdateIterations;
+            StartState += () => ++StartIterations;
+            EndState += () => ++EndIterations;
+        }
     }
 }

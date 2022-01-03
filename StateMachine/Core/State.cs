@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace StateMachineCore
 {
-    public abstract class State : IState
+    public class State : IState
     {
         List<StateTransition> Transitions { get; set; } = new List<StateTransition>();
 
@@ -15,9 +15,8 @@ namespace StateMachineCore
             return GetFirstSuccessfulTransition();
         }
 
-        public virtual void Start() { }
-        public virtual void End() { }
-        protected virtual void UpdateState() { }
+        public void Start() => StartState();
+        public void End() => EndState();
 
         public void AddTransition(Func<bool> checkCondition, IState transitionState)
         {
@@ -28,7 +27,11 @@ namespace StateMachineCore
         public void AddTransition(StateTransition transition) =>
             Transitions.Add(transition);
 
-        StateTransition GetFirstSuccessfulTransition() => 
+        StateTransition GetFirstSuccessfulTransition() =>
             Transitions.Where(t => t.Condition()).FirstOrDefault();
+
+        public event Action StartState = () => { };
+        public event Action EndState = () => { };
+        public event Action UpdateState = () => { };
     }
 }
