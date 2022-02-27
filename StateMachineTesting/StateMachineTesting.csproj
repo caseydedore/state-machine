@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="AnyStateTest.cs" />
     <Compile Include="IntegrationTest.cs" />
+    <Compile Include="StateConstructorTest.cs" />
     <Compile Include="StateGroupTest.cs" />
     <Compile Include="TestState\TestStateGroup.cs" />
     <Compile Include="TransitionTest.cs" />
