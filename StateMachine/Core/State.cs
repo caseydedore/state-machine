@@ -9,6 +9,13 @@ namespace StateMachineCore
     {
         List<StateTransition> Transitions { get; set; } = new List<StateTransition>();
 
+        public State(Action start = null, Action update = null, Action end = null)
+        {
+            if (start != null) StartState = start;
+            if (update != null) UpdateState = update;
+            if (end != null) EndState = end;
+        }
+
         public StateTransition Update()
         {
             UpdateState();
@@ -16,6 +23,7 @@ namespace StateMachineCore
         }
 
         public void Start() => StartState();
+
         public void End() => EndState();
 
         public void AddTransition(Func<bool> checkCondition, IState transitionState)
@@ -30,8 +38,8 @@ namespace StateMachineCore
         StateTransition GetFirstSuccessfulTransition() =>
             Transitions.Where(t => t.Condition()).FirstOrDefault();
 
-        public event Action StartState = () => { };
-        public event Action EndState = () => { };
-        public event Action UpdateState = () => { };
+        protected event Action StartState = () => { };
+        protected event Action EndState = () => { };
+        protected event Action  UpdateState = () => { };
     }
 }
