@@ -6,8 +6,11 @@ namespace StateMachineCore
         IState currentState;
         IState nextState;
 
-        public StateGroup()
+        public StateGroup(IState entry = null)
         {
+            if (entry != null)
+                Entry = entry;
+
             UpdateState += () =>
             {
                 if (nextState != null)
@@ -37,6 +40,7 @@ namespace StateMachineCore
         }
 
         public IState Entry { get; set; }
+
         public IState Any { get; } = new State();
     }
 }
