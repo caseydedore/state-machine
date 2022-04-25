@@ -1,4 +1,6 @@
 
+using System;
+
 namespace StateMachineCore
 {
 	public class StateGroup : State
@@ -6,11 +8,8 @@ namespace StateMachineCore
         IState currentState;
         IState nextState;
 
-        public StateGroup(IState entry = null)
+        public StateGroup(Action start = null, Action end = null)
         {
-            if (entry != null)
-                Entry = entry;
-
             UpdateState += () =>
             {
                 if (nextState != null)
@@ -29,13 +28,17 @@ namespace StateMachineCore
             };
 
             StartState += () =>
+            {
+                start?.Invoke();
                 nextState = Entry;
+            };
 
             EndState += () =>
             {
                 currentState?.End();
                 nextState = null;
                 currentState = null;
+                end?.Invoke();
             };
         }
 
