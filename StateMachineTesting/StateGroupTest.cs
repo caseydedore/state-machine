@@ -7,7 +7,23 @@ namespace StateMachineTesting
     public class StateGroupTest
     {
         [TestMethod]
-        public void SubstateLifecycle()
+        public void LifecycleEvents()
+        {
+            var group = new TestStateGroup();
+            var state = new TestState();
+            group.Entry = state;
+
+            group.Start();
+            group.Update();
+            group.End();
+
+            Assert.AreEqual(1, group.StartIterations);
+            Assert.AreEqual(1, state.UpdateIterations);
+            Assert.AreEqual(1, group.EndIterations);
+        }
+
+        [TestMethod]
+        public void SubstateLifecycleEvents()
         {
             var group = new TestStateGroup();
             var state = new TestState();
@@ -45,6 +61,18 @@ namespace StateMachineTesting
         public void Start()
         {
             var group = new TestStateGroup();
+
+            group.Start();
+
+            Assert.AreEqual(1, group.StartIterations);
+            Assert.AreEqual(0, group.UpdateIterations);
+            Assert.AreEqual(0, group.EndIterations);
+        }
+
+        [TestMethod]
+        public void StartNoSubstateEvents()
+        {
+            var group = new TestStateGroup();
             var state = new TestState();
             group.Entry = state;
 
@@ -56,7 +84,7 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
-        public void ErrantStart()
+        public void ErrantStartNoSubstateStart()
         {
             var group = new TestStateGroup();
             var state = new TestState();
@@ -70,7 +98,7 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
-        public void ErrantEnd()
+        public void ErrantEndNoSubstateEndAgain()
         {
             var group = new TestStateGroup();
             var state = new TestState();
@@ -85,7 +113,7 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
-        public void EndWithoutStart()
+        public void EndWithoutStartNoSubstateEvents()
         {
             var group = new TestStateGroup();
             var state = new TestState();
@@ -99,7 +127,7 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
-        public void UpdateWithoutStart()
+        public void UpdateWithoutStartNoSubstateEvents()
         {
             var group = new TestStateGroup();
             var state = new TestState();
@@ -110,22 +138,6 @@ namespace StateMachineTesting
             Assert.AreEqual(0, state.StartIterations);
             Assert.AreEqual(0, state.UpdateIterations);
             Assert.AreEqual(0, state.EndIterations);
-        }
-
-        [TestMethod]
-        public void LifecycleEvents()
-        {
-            var group = new TestStateGroup();
-            var state = new TestState();
-            group.Entry = state;
-
-            group.Start();
-            group.Update();
-            group.End();
-
-            Assert.AreEqual(1, group.StartIterations);
-            Assert.AreEqual(1, state.UpdateIterations);
-            Assert.AreEqual(1, group.EndIterations);
         }
     }
 }

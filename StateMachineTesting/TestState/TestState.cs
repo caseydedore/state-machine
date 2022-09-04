@@ -1,5 +1,6 @@
 ﻿
 using StateMachineCore;
+using System;
 
 namespace StateMachineTesting
 {
@@ -9,7 +10,7 @@ namespace StateMachineTesting
         public int StartIterations { get; protected set; }
         public int EndIterations { get; protected set; }
 
-        public TestState()
+        public TestState(Action start = null, Action update = null, Action end = null) : base(start, update, end)
         {
             UpdateState += () => ++UpdateIterations;
             StartState += () => ++StartIterations;

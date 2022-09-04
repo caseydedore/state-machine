@@ -1,0 +1,105 @@
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace StateMachineTesting
+{
+    [TestClass]
+    public class TransitionAfterTest
+    {
+        [TestMethod]
+        public void TransitionAfterNoUpdate()
+        {
+            var state = new TestState();
+            var nextState = new TestState();
+            state.AddTransitionAfter(0, nextState);
+
+            state.Start();
+            var transition = state.Update();
+
+            Assert.IsNotNull(transition);
+            Assert.AreEqual(1, state.StartIterations);
+            Assert.AreEqual(1, state.UpdateIterations);
+        }
+
+        [TestMethod]
+        public void TransitionAfterOneUpdate()
+        {
+            var state = new TestState();
+            var nextState = new TestState();
+            state.AddTransitionAfter(1, nextState);
+
+            state.Start();
+            var first = state.Update();
+
+            Assert.IsNotNull(first);
+        }
+
+        [TestMethod]
+        public void TransitionAfterTwoUpdates()
+        {
+            var state = new TestState();
+            var nextState = new TestState();
+            state.AddTransitionAfter(2, nextState);
+
+            state.Start();
+            var first = state.Update();
+            var second = state.Update();
+
+            Assert.IsNull(first);
+            Assert.IsNotNull(second);
+        }
+
+        [TestMethod]
+        public void TransitionAfterConditionSuccess()
+        {
+            var state = new TestState();
+            var nextState = new TestState();
+            state.AddTransitionAfter(0, () => true, nextState);
+
+            state.Start();
+            var first = state.Update();
+
+            Assert.IsNotNull(first);
+        }
+
+        [TestMethod]
+        public void TransitionAfterConditionFailure()
+        {
+            var state = new TestState();
+            var nextState = new TestState();
+            state.AddTransitionAfter(0, () => false, nextState);
+
+            state.Start();
+            var first = state.Update();
+
+            Assert.IsNull(first);
+        }
+
+        [TestMethod]
+        public void TransitionAfterOneUpdateConditionSuccess()
+        {
+            var state = new TestState();
+            var nextState = new TestState();
+            state.AddTransitionAfter(1, () => true, nextState);
+
+            state.Start();
+            var first = state.Update();
+
+            Assert.IsNotNull(first);
+        }
+
+        [TestMethod]
+        public void TransitionAfterOneUpdateConditionFailure()
+        {
+            var state = new TestState();
+            var nextState = new TestState();
+            state.AddTransitionAfter(1, () => false, nextState);
+
+            state.Start();
+            var first = state.Update();
+            var second = state.Update();
+
+            Assert.IsNull(first);
+            Assert.IsNull(second);
+        }
+    }
+}
