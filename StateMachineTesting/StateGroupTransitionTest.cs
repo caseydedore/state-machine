@@ -1,10 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using StateMachineCore;
 
 namespace StateMachineTesting
 {
     [TestClass]
-    public class IntegrationTest
+    public class StateGroupTransitionTest
     {
         [TestMethod]
         public void GroupTransition()
@@ -13,8 +12,7 @@ namespace StateMachineTesting
             var startGroup = new TestStateGroup();
             var destGroup = new TestStateGroup();
             rootGroup.Entry = startGroup;
-            var toDest = new StateTransition(() => { return true; }, destGroup);
-            startGroup.AddTransition(toDest);
+            startGroup.AddTransition(() => true, destGroup);
             var startState = new TestState();
             startGroup.Entry = startState;
             var destState = new TestState();
@@ -39,8 +37,7 @@ namespace StateMachineTesting
             var dest = new TestStateGroup();
             root.Entry = start;
             var willTransition = false;
-            var toDest = new StateTransition(() => { return willTransition; }, dest);
-            start.AddTransition(toDest);
+            start.AddTransition(() => willTransition, dest);
             var sharedSubstate = new TestState();
             start.Entry = sharedSubstate;
             dest.Entry = sharedSubstate;

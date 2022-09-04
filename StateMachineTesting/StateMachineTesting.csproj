@@ -52,12 +52,12 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AnyStateTest.cs" />
-    <Compile Include="IntegrationTest.cs" />
+    <Compile Include="StateGroupTransitionTest.cs" />
     <Compile Include="StateConstructorTest.cs" />
     <Compile Include="StateGroupConstructorTest.cs" />
     <Compile Include="StateGroupTest.cs" />
     <Compile Include="TestState\TestStateGroup.cs" />
-    <Compile Include="TransitionTest.cs" />
+    <Compile Include="StateTransitionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateTest.cs" />
     <Compile Include="TestState\TestState.cs" />
