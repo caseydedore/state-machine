@@ -24,9 +24,9 @@ namespace StateMachineTesting
             rootGroup.Update();
             rootGroup.Update();
 
-            Assert.AreEqual(1, startState.StartIterations);
-            Assert.AreEqual(1, startState.UpdateIterations);
-            Assert.AreEqual(1, startState.EndIterations);
+            Assert.AreEqual(0, startState.StartIterations);
+            Assert.AreEqual(0, startState.UpdateIterations);
+            Assert.AreEqual(0, startState.EndIterations);
             Assert.AreEqual(1, destState.StartIterations);
             Assert.AreEqual(1, destState.UpdateIterations);
         }
@@ -38,13 +38,16 @@ namespace StateMachineTesting
             var start = new TestStateGroup();
             var dest = new TestStateGroup();
             root.Entry = start;
-            var toDest = new StateTransition(() => { return true; }, dest);
+            var willTransition = false;
+            var toDest = new StateTransition(() => { return willTransition; }, dest);
             start.AddTransition(toDest);
             var sharedSubstate = new TestState();
             start.Entry = sharedSubstate;
             dest.Entry = sharedSubstate;
 
             root.Start();
+            root.Update();
+            willTransition = true;
             root.Update();
             root.Update();
 

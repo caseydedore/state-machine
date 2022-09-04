@@ -139,7 +139,8 @@ namespace StateMachineTesting
             group.Update();
             group.Update();
 
-            Assert.AreEqual(1, start.UpdateIterations);
+            Assert.AreEqual(0, start.UpdateIterations);
+            Assert.AreEqual(1, destination.StartIterations);
             Assert.AreEqual(1, destination.UpdateIterations);
             Assert.AreEqual(0, secondDestination.UpdateIterations);
         }
@@ -172,20 +173,25 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var first = new TestState();
             var second = new TestState();
-            var firstTransition = new StateTransition(() => { return true; }, second);
-            var secondTransition = new StateTransition(() => { return true; }, first);
+            var shouldTransitionToSecond = false;
+            var shouldTransitionToFirst = false;
+            var firstTransition = new StateTransition(() => { return shouldTransitionToSecond; }, second);
+            var secondTransition = new StateTransition(() => { return shouldTransitionToFirst; }, first);
             first.AddTransition(firstTransition);
             second.AddTransition(secondTransition);
             group.Entry = first;
 
             group.Start();
             group.Update();
+            shouldTransitionToSecond = true;
             group.Update();
+            shouldTransitionToSecond = false;
             group.Update();
+            shouldTransitionToFirst = true;
             group.Update();
 
-            Assert.AreEqual(2, first.UpdateIterations);
-            Assert.AreEqual(2, second.UpdateIterations);
+            Assert.AreEqual(1, first.UpdateIterations);
+            Assert.AreEqual(1, second.UpdateIterations);
         }
 
         [TestMethod]
@@ -226,7 +232,7 @@ namespace StateMachineTesting
             willTransitionSucceed = true;
             group.Update();
 
-            Assert.AreEqual(2, state.UpdateIterations);
+            Assert.AreEqual(1, state.UpdateIterations);
             Assert.AreEqual(0, destination.StartIterations);
         }
     }
