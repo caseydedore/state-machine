@@ -18,8 +18,10 @@ namespace StateMachineCore
 
         public StateTransition Update()
         {
-            UpdateState();
-            return GetFirstSuccessfulTransition();
+            var transition = GetFirstSuccessfulTransition();
+            if (transition == null)
+                UpdateState();
+            return transition;
         }
 
         public void Start() => StartState();
