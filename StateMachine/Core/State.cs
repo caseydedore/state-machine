@@ -18,10 +18,8 @@ namespace StateMachineCore
 
         public StateTransition Update()
         {
-            var successfulTransition = GetFirstSuccessfulTransition();
-            if (successfulTransition == null)
-                UpdateState();
-            return successfulTransition;
+            UpdateState();
+            return GetFirstSuccessfulTransition();
         }
 
         public void Start() => StartState();
@@ -37,7 +35,7 @@ namespace StateMachineCore
         public void AddTransition(StateTransition transition) =>
             Transitions.Add(transition);
 
-        StateTransition GetFirstSuccessfulTransition() =>
+        protected StateTransition GetFirstSuccessfulTransition() =>
             Transitions.Where(t => t.Condition()).FirstOrDefault();
 
         protected event Action StartState = () => { };

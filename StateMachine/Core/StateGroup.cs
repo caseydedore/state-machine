@@ -45,6 +45,14 @@ namespace StateMachineCore
         public IState Entry { get; set; }
 
         public IState Any { get; } = new State();
+
+        new public StateTransition Update()
+        {
+            var transition = GetFirstSuccessfulTransition();
+            if (transition == null)
+                base.Update();
+            return transition;
+        }
     }
 }
 
