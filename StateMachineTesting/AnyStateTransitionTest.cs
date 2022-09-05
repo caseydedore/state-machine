@@ -38,6 +38,23 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
+        public void AnyStateTransitionNotAffectGroup()
+        {
+            var group = new TestStateGroup();
+            var start = new TestState();
+            var destination = new TestState();
+            group.Any.AddTransition(() => true, destination);
+            group.Entry = start;
+
+            group.Start();
+            group.Update();
+            group.Update();
+
+            Assert.AreEqual(2, group.UpdateIterations);
+            Assert.AreEqual(0, group.EndIterations);
+        }
+
+        [TestMethod]
         public void StateTransitionPriorityOverAnyStateTransition()
         {
             var group = new TestStateGroup();

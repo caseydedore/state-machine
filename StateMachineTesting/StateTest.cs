@@ -3,24 +3,42 @@
 namespace StateMachineTesting
 {
     [TestClass]
-    class StateTest
+    public class StateTest
     {
         [TestMethod]
-        public void Start()
+        public void OneStateUpdate()
         {
+            var group = new TestStateGroup();
+            var state = new TestState();
+            group.Entry = state;
 
+            group.Start();
+            group.Update();
+
+            Assert.AreEqual(1, state.StartIterations);
+            Assert.AreEqual(1, state.UpdateIterations);
+            Assert.AreEqual(0, state.EndIterations);
         }
 
         [TestMethod]
-        public void Update()
+        public void OneStateUpdates()
         {
+            var group = new TestStateGroup();
+            var state = new TestState();
+            var iterations = 42;
+            group.Entry = state;
 
-        }
+            group.Start();
+            var current = 0;
+            while (current < iterations)
+            {
+                current++;
+                group.Update();
+            }
 
-        [TestMethod]
-        public void End()
-        {
-
+            Assert.AreEqual(1, state.StartIterations);
+            Assert.AreEqual(iterations, state.UpdateIterations);
+            Assert.AreEqual(0, state.EndIterations);
         }
     }
 }
