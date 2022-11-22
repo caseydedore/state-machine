@@ -8,12 +8,26 @@ namespace StateMachineTesting
     {
         public int UpdateIterations { get; protected set; }
         public int StartIterations { get; protected set; }
+        public int StartOptionalIterations { get; protected set; }
         public int EndIterations { get; protected set; }
 
-        public TestState(Action start = null, Action update = null, Action end = null) : base(start, update, end)
+        public TestState
+        (
+            Action start = null,
+            Action startOptional = null,
+            Action update = null,
+            Action end = null
+        ) : base
+        (
+            start,
+            startOptional,
+            update,
+            end
+        )
         {
             UpdateState += () => ++UpdateIterations;
             StartState += () => ++StartIterations;
+            StartOptionalState += () => ++StartOptionalIterations;
             EndState += () => ++EndIterations;
         }
     }
