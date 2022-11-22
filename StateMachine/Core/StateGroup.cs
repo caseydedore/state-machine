@@ -12,13 +12,15 @@ namespace StateMachineCore
         {
             UpdateState += () =>
             {
+                StateTransition transition = null;
                 if (nextState != null)
                 {
                     currentState = nextState;
                     nextState = null;
-                    currentState.Start();
+                    transition = currentState.Start();
                 }
-                var transition = currentState?.Update() ?? Any.Update();
+                if (transition == null)
+                    transition = currentState?.Update() ?? Any.Update();
                 if (transition != null)
                 {
                     currentState?.End();

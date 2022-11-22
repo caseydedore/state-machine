@@ -5,7 +5,7 @@ namespace StateMachineCore
 {
 	public interface IState
 	{
-        void Start();
+        StateTransition Start();
         void End();
         StateTransition Update();
         void AddTransition(Func<bool> checkCondition, IState transitionState);
