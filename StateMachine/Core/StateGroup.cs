@@ -17,8 +17,7 @@ namespace StateMachineCore
                 {
                     currentState = nextState;
                     nextState = null;
-                    currentState.Start();
-                    transition = currentState.StartOptional();
+                    transition = currentState.Start();
                 }
                 if (transition == null)
                     transition = currentState?.Update() ?? Any.Update();

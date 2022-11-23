@@ -25,10 +25,9 @@ namespace StateMachineCore
             return transition;
         }
 
-        public void Start() => StartState();
-
-        public StateTransition StartOptional()
+        public StateTransition Start()
         {
+            StartState();
             var transition = GetFirstSuccessfulTransition();
             if (transition == null)
                 StartOptionalState();
