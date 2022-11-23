@@ -9,7 +9,7 @@ namespace StateMachineCore
         void End();
         StateTransition Update();
         void AddTransition(Func<bool> checkCondition, IState transitionState);
-        void AddTransition(Func<bool> checkCondition, IState transitionState, TransitionMode mode);
+        void AddTransitionAfter(uint afterUpdates, IState transitionState);
         void AddTransition(StateTransition transition);
     }
 }

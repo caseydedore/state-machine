@@ -42,9 +42,15 @@ namespace StateMachineCore
             iterations = 0;
         }
 
-        public void AddTransition(Func<bool> checkCondition, IState transitionState, TransitionMode mode)
+        public void AddTransitionAfter(uint numberOfUpdates, IState transitionState)
         {
-            var transition = new StateTransition(checkCondition, transitionState, mode);
+            var transition = new StateTransition(numberOfUpdates, transitionState);
+            AddTransition(transition);
+        }
+
+        public void AddTransitionAfter(uint numberOfUpdates, Func<bool> checkCondition, IState transitionState)
+        {
+            var transition = new StateTransition(numberOfUpdates, checkCondition, transitionState);
             AddTransition(transition);
         }
 
@@ -54,12 +60,11 @@ namespace StateMachineCore
             AddTransition(transition);
         }
 
-        public void AddTransition(StateTransition transition) =>
-            Transitions.Add(transition);
+        public void AddTransition(StateTransition transition) => Transitions.Add(transition);
 
         StateTransition GetFirstSuccessfulTransition() =>
             Transitions
-                .Where(t => iterations > 0 || t.Mode == TransitionMode.Immediate)
+                .Where(t => t.MinimumUpdates <= iterations)
                 .Where(t => t.Condition())
                 .FirstOrDefault();
 
