@@ -35,6 +35,22 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
+        public void StartOptionalConstructor()
+        {
+            var startOptionalIterations = 0;
+            var group = new StateGroup
+            (
+                startOptional: () => startOptionalIterations++
+            );
+
+            group.Start();
+            group.Update();
+            group.End();
+
+            Assert.AreEqual(1, startOptionalIterations);
+        }
+
+        [TestMethod]
         public void EndConstructor()
         {
             var endIterations = 0;

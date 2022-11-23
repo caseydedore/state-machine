@@ -19,10 +19,10 @@ namespace StateMachineTesting
             Action end = null
         ) : base
         (
-            start,
-            startOptional,
-            update,
-            end
+            start: start,
+            startOptional: startOptional,
+            update: update,
+            end: end
         )
         {
             UpdateState += () => ++UpdateIterations;

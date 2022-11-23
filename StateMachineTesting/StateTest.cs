@@ -16,6 +16,7 @@ namespace StateMachineTesting
             group.Update();
 
             Assert.AreEqual(1, state.StartIterations);
+            Assert.AreEqual(1, state.StartOptionalIterations);
             Assert.AreEqual(1, state.UpdateIterations);
             Assert.AreEqual(0, state.EndIterations);
         }
@@ -37,6 +38,7 @@ namespace StateMachineTesting
             }
 
             Assert.AreEqual(1, state.StartIterations);
+            Assert.AreEqual(1, state.StartOptionalIterations);
             Assert.AreEqual(iterations, state.UpdateIterations);
             Assert.AreEqual(0, state.EndIterations);
         }

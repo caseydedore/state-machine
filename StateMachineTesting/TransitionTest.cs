@@ -40,6 +40,19 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
+        public void TransitionSuccessPreventsStartOptional()
+        {
+            var first = new TestState();
+            var next = new TestState();
+            first.AddTransition(() => true, next);
+
+            first.Start();
+            first.Update();
+
+            Assert.AreEqual(0, first.StartOptionalIterations);
+        }
+
+        [TestMethod]
         public void TransitionSuccessContinuouslyPreventsUpdates()
         {
             var group = new TestStateGroup();

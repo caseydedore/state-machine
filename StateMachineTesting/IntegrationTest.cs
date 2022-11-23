@@ -26,9 +26,11 @@ namespace StateMachineTesting
             rootGroup.Update();
 
             Assert.AreEqual(1, startState.StartIterations);
+            Assert.AreEqual(1, startState.StartOptionalIterations);
             Assert.AreEqual(1, startState.UpdateIterations);
             Assert.AreEqual(1, startState.EndIterations);
             Assert.AreEqual(0, destState.StartIterations);
+            Assert.AreEqual(0, destState.StartOptionalIterations);
             Assert.AreEqual(0, destState.UpdateIterations);
         }
 
@@ -54,9 +56,11 @@ namespace StateMachineTesting
             rootGroup.Update();
 
             Assert.AreEqual(1, startState.StartIterations);
+            Assert.AreEqual(1, startState.StartOptionalIterations);
             Assert.AreEqual(1, startState.UpdateIterations);
             Assert.AreEqual(1, startState.EndIterations);
             Assert.AreEqual(1, destState.StartIterations);
+            Assert.AreEqual(1, destState.StartOptionalIterations);
             Assert.AreEqual(1, destState.UpdateIterations);
         }
 
@@ -80,6 +84,7 @@ namespace StateMachineTesting
             root.Update();
 
             Assert.AreEqual(2, sharedSubstate.StartIterations);
+            Assert.AreEqual(2, sharedSubstate.StartOptionalIterations);
             Assert.AreEqual(2, sharedSubstate.UpdateIterations);
             Assert.AreEqual(1, sharedSubstate.EndIterations);
         }

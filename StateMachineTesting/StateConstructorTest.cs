@@ -23,7 +23,8 @@ namespace StateMachineTesting
         public void StartOnly()
         {
             var startFired = false;
-            var state = new State(
+            var state = new State
+            (
                 start: () => startFired = true
             );
 
@@ -35,10 +36,27 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
+        public void StartOptionalOnly()
+        {
+            var startOptionalFired = false;
+            var state = new State
+            (
+                startOptional: () => startOptionalFired = true
+            );
+
+            state.Start();
+            state.Update();
+            state.End();
+
+            Assert.IsTrue(startOptionalFired);
+        }
+
+        [TestMethod]
         public void UpdateOnly()
         {
             var updateFired = false;
-            var state = new State(
+            var state = new State
+            (
                 update: () => updateFired = true
             );
 
@@ -53,7 +71,8 @@ namespace StateMachineTesting
         public void EndOnly()
         {
             var endFired = false;
-            var state = new State(
+            var state = new State
+            (
                 end: () => endFired = true
             );
 
