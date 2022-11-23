@@ -8,7 +8,7 @@ namespace StateMachineCore
     public class State : IState
     {
         List<StateTransition> Transitions { get; set; } = new List<StateTransition>();
-        List<StateTransition> PostTransitions { get; set; } = new List<StateTransition>();
+        uint iterations = 0;
 
         public State(Action start = null, Action update = null, Action end = null)
         {
@@ -21,9 +21,10 @@ namespace StateMachineCore
         {
             var transition = GetFirstSuccessfulTransition();
             if (transition == null)
+            {
                 UpdateState();
-            if (transition == null)
-                transition = GetFirstSuccessfulPostTransition();
+                ++iterations;
+            }
             return transition;
         }
 
@@ -35,7 +36,17 @@ namespace StateMachineCore
             return transition;
         }
 
-        public void End() => EndState();
+        public void End()
+        {
+            EndState();
+            iterations = 0;
+        }
+
+        public void AddTransition(Func<bool> checkCondition, IState transitionState, TransitionMode mode)
+        {
+            var transition = new StateTransition(checkCondition, transitionState, mode);
+            AddTransition(transition);
+        }
 
         public void AddTransition(Func<bool> checkCondition, IState transitionState)
         {
@@ -46,20 +57,11 @@ namespace StateMachineCore
         public void AddTransition(StateTransition transition) =>
             Transitions.Add(transition);
 
-        public void AddPostTransition(Func<bool> checkCondition, IState transitionState)
-        {
-            var transition = new StateTransition(checkCondition, transitionState);
-            AddPostTransition(transition);
-        }
-
-        public void AddPostTransition(StateTransition transition) =>
-            PostTransitions.Add(transition);
-
         StateTransition GetFirstSuccessfulTransition() =>
-            Transitions.Where(t => t.Condition()).FirstOrDefault();
-
-        StateTransition GetFirstSuccessfulPostTransition() =>
-            PostTransitions.Where(t => t.Condition()).FirstOrDefault();
+            Transitions
+                .Where(t => iterations > 0 || t.Mode == TransitionMode.Immediate)
+                .Where(t => t.Condition())
+                .FirstOrDefault();
 
         protected event Action StartState = () => { };
         protected event Action EndState = () => { };

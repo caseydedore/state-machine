@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Interfaces\TransitionMode.cs" />
     <Compile Include="Core\State.cs" />
     <Compile Include="Core\StateGroup.cs" />
     <Compile Include="Core\Interfaces\IState.cs" />
