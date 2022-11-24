@@ -83,5 +83,49 @@ namespace StateMachineTesting
             Assert.AreEqual(2, sharedSubstate.UpdateIterations);
             Assert.AreEqual(1, sharedSubstate.EndIterations);
         }
+
+        [TestMethod]
+        public void StateTransitionAfterNoUpdate()
+        {
+            var root = new TestStateGroup();
+            var first = new TestState();
+            var second = new TestState();
+            root.Entry = first;
+            first.AddTransitionAfter(0, second);
+
+            root.Start();
+            root.Update();
+            root.Update();
+
+            Assert.AreEqual(0, first.StartIterations);
+            Assert.AreEqual(0, first.UpdateIterations);
+            //Assert.AreEqual(0, first.EndIterations);
+        }
+
+        [TestMethod]
+        public void StateTransitionAfterBackAndForth()
+        {
+            var root = new TestStateGroup();
+            var first = new TestState();
+            var second = new TestState();
+            root.Entry = first;
+            first.AddTransitionAfter(1, second);
+            second.AddTransitionAfter(1, first);
+
+            root.Start();
+            root.Update();
+            root.Update();
+            root.Update();
+            root.Update();
+            root.Update();
+
+            Assert.AreEqual(2, first.StartIterations);
+            Assert.AreEqual(2, first.UpdateIterations);
+            Assert.AreEqual(1, first.EndIterations);
+            Assert.AreEqual(1, second.StartIterations);
+            Assert.AreEqual(1, second.UpdateIterations);
+            Assert.AreEqual(1, second.EndIterations);
+
+        }
     }
 }
