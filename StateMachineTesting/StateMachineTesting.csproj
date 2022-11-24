@@ -57,6 +57,7 @@
     <Compile Include="StateGroupConstructorTest.cs" />
     <Compile Include="StateGroupTest.cs" />
     <Compile Include="TestState\TestStateGroup.cs" />
+    <Compile Include="TransitionAfterTest.cs" />
     <Compile Include="TransitionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateTest.cs" />
