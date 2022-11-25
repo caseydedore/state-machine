@@ -28,9 +28,10 @@ namespace StateMachineCore
         {
             UpdateState();
             ++iterations;
-            var transition = GetFirstSuccessfulTransition();
-            if (transition == null)
+            var ignoreIterationTransition = GetFirstSuccessfulTransitionBeforeCurrentIteration();
+            if (ignoreIterationTransition == null)
                 OptionalUpdateState();
+            var transition = GetFirstSuccessfulTransition();
             return transition;
         }
 
@@ -74,6 +75,12 @@ namespace StateMachineCore
         StateTransition GetFirstSuccessfulTransition() =>
             Transitions
                 .Where(t => t.MinimumUpdates <= iterations)
+                .Where(t => t.Condition())
+                .FirstOrDefault();
+
+        StateTransition GetFirstSuccessfulTransitionBeforeCurrentIteration() =>
+            Transitions
+                .Where(t => t.MinimumUpdates <= iterations - 1)
                 .Where(t => t.Condition())
                 .FirstOrDefault();
 
