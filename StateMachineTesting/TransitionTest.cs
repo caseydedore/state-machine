@@ -41,6 +41,9 @@ namespace StateMachineTesting
             Assert.AreEqual(1, first.StartIterations);
             Assert.AreEqual(1, first.UpdateIterations);
             Assert.AreEqual(1, first.EndIterations);
+            Assert.AreEqual(0, first.OptionalStartIterations);
+            Assert.AreEqual(0, first.OptionalUpdateIterations);
+            Assert.AreEqual(0, first.OptionalEndIterations);
             Assert.AreEqual(0, next.StartIterations);
             Assert.AreEqual(0, next.UpdateIterations);
         }
@@ -61,6 +64,8 @@ namespace StateMachineTesting
             Assert.AreEqual(1, first.EndIterations);
             Assert.AreEqual(1, next.StartIterations);
             Assert.AreEqual(1, next.UpdateIterations);
+            Assert.AreEqual(1, next.OptionalStartIterations);
+            Assert.AreEqual(1, next.OptionalUpdateIterations);
         }
 
         [TestMethod]
@@ -167,7 +172,9 @@ namespace StateMachineTesting
             group.Update();
             group.Update();
 
+            Assert.AreEqual(2, first.StartIterations);
             Assert.AreEqual(2, first.UpdateIterations);
+            Assert.AreEqual(2, second.StartIterations);
             Assert.AreEqual(2, second.UpdateIterations);
         }
 
