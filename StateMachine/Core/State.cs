@@ -10,11 +10,18 @@ namespace StateMachineCore
         List<StateTransition> Transitions { get; set; } = new List<StateTransition>();
         uint iterations = 0;
 
-        public State(Action start = null, Action update = null, Action end = null)
+        public State
+        (
+            Action start = null, Action update = null, Action end = null,
+            Action optionalStart = null, Action optionalUpdate = null, Action optionalEnd = null
+        )
         {
             if (start != null) StartState = start;
             if (update != null) UpdateState = update;
             if (end != null) EndState = end;
+            if (optionalStart != null) OptionalStartState = optionalStart;
+            if (optionalUpdate != null) OptionalUpdateState = optionalUpdate;
+            if (optionalEnd != null) OptionalEndState = optionalEnd;
         }
 
         public StateTransition Update()
@@ -22,14 +29,25 @@ namespace StateMachineCore
             UpdateState();
             ++iterations;
             var transition = GetFirstSuccessfulTransition();
+            if (transition == null)
+                OptionalUpdateState();
             return transition;
         }
 
-        public void Start() => StartState();
+        public void Start()
+        {
+            StartState();
+            var transition = GetFirstSuccessfulTransition();
+            if (transition == null)
+                OptionalStartState();
+        }
 
         public void End()
         {
             EndState();
+            var transition = GetFirstSuccessfulTransition();
+            if (transition == null)
+                OptionalEndState();
             iterations = 0;
         }
 
@@ -62,5 +80,9 @@ namespace StateMachineCore
         protected event Action StartState = () => { };
         protected event Action EndState = () => { };
         protected event Action  UpdateState = () => { };
+
+        protected event Action OptionalStartState = () => { };
+        protected event Action OptionalUpdateState = () => { };
+        protected event Action OptionalEndState = () => { };
     }
 }
