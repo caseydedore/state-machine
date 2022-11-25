@@ -14,7 +14,7 @@ namespace StateMachineCore
             Action optionalStart = null, Action optionalEnd = null
         )
         {
-            UpdateState += () =>
+            OptionalUpdateState += () =>
             {
                 if (nextState != null)
                 {

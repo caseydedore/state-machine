@@ -217,5 +217,25 @@ namespace StateMachineTesting
 
             Assert.AreEqual(1, destination.StartIterations);
         }
+
+        [TestMethod]
+        public void TransitionPreventsSubstateEvents()
+        {
+            var group = new TestStateGroup();
+            var destGroup = new TestStateGroup();
+            var state = new TestState();
+            group.Entry = state;
+            group.AddTransition(() => true, destGroup);
+
+            group.Start();
+            group.Update();
+
+            Assert.AreEqual(0, state.StartIterations);
+            Assert.AreEqual(0, state.UpdateIterations);
+            Assert.AreEqual(0, state.EndIterations);
+            Assert.AreEqual(0, state.OptionalStartIterations);
+            Assert.AreEqual(0, state.OptionalUpdateIterations);
+            Assert.AreEqual(0, state.OptionalEndIterations);
+        }
     }
 }
