@@ -12,43 +12,27 @@ namespace StateMachineCore
 
         public State
         (
-            Action start = null, Action update = null, Action end = null,
-            Action optionalStart = null, Action optionalUpdate = null, Action optionalEnd = null
+            Action start = null, Action update = null, Action end = null
         )
         {
             if (start != null) StartState = start;
             if (update != null) UpdateState = update;
             if (end != null) EndState = end;
-            if (optionalStart != null) OptionalStartState = optionalStart;
-            if (optionalUpdate != null) OptionalUpdateState = optionalUpdate;
-            if (optionalEnd != null) OptionalEndState = optionalEnd;
         }
 
         public StateTransition Update()
         {
             UpdateState();
             ++iterations;
-            var ignoreIterationTransition = GetFirstSuccessfulTransitionBeforeCurrentIteration();
-            if (ignoreIterationTransition == null)
-                OptionalUpdateState();
             var transition = GetFirstSuccessfulTransition();
             return transition;
         }
 
-        public void Start()
-        {
-            StartState();
-            var transition = GetFirstSuccessfulTransition();
-            if (transition == null)
-                OptionalStartState();
-        }
+        public void Start() => StartState();
 
         public void End()
         {
             EndState();
-            var transition = GetFirstSuccessfulTransition();
-            if (transition == null)
-                OptionalEndState();
             iterations = 0;
         }
 
@@ -78,18 +62,8 @@ namespace StateMachineCore
                 .Where(t => t.Condition())
                 .FirstOrDefault();
 
-        StateTransition GetFirstSuccessfulTransitionBeforeCurrentIteration() =>
-            Transitions
-                .Where(t => t.MinimumUpdates <= iterations - 1)
-                .Where(t => t.Condition())
-                .FirstOrDefault();
-
         protected event Action StartState = () => { };
         protected event Action EndState = () => { };
         protected event Action  UpdateState = () => { };
-
-        protected event Action OptionalStartState = () => { };
-        protected event Action OptionalUpdateState = () => { };
-        protected event Action OptionalEndState = () => { };
     }
 }

@@ -41,9 +41,6 @@ namespace StateMachineTesting
             Assert.AreEqual(1, first.StartIterations);
             Assert.AreEqual(1, first.UpdateIterations);
             Assert.AreEqual(1, first.EndIterations);
-            Assert.AreEqual(0, first.OptionalStartIterations);
-            Assert.AreEqual(0, first.OptionalUpdateIterations);
-            Assert.AreEqual(0, first.OptionalEndIterations);
             Assert.AreEqual(0, next.StartIterations);
             Assert.AreEqual(0, next.UpdateIterations);
         }
@@ -64,8 +61,6 @@ namespace StateMachineTesting
             Assert.AreEqual(1, first.EndIterations);
             Assert.AreEqual(1, next.StartIterations);
             Assert.AreEqual(1, next.UpdateIterations);
-            Assert.AreEqual(1, next.OptionalStartIterations);
-            Assert.AreEqual(1, next.OptionalUpdateIterations);
         }
 
         [TestMethod]
@@ -216,26 +211,6 @@ namespace StateMachineTesting
             group.Update();
 
             Assert.AreEqual(1, destination.StartIterations);
-        }
-
-        [TestMethod]
-        public void TransitionPreventsSubstateEvents()
-        {
-            var group = new TestStateGroup();
-            var destGroup = new TestStateGroup();
-            var state = new TestState();
-            group.Entry = state;
-            group.AddTransition(() => true, destGroup);
-
-            group.Start();
-            group.Update();
-
-            Assert.AreEqual(0, state.StartIterations);
-            Assert.AreEqual(0, state.UpdateIterations);
-            Assert.AreEqual(0, state.EndIterations);
-            Assert.AreEqual(0, state.OptionalStartIterations);
-            Assert.AreEqual(0, state.OptionalUpdateIterations);
-            Assert.AreEqual(0, state.OptionalEndIterations);
         }
     }
 }

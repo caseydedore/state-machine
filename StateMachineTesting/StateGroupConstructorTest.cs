@@ -51,38 +51,6 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
-        public void OptionalStartConstructor()
-        {
-            var didExecute = false;
-            var group = new StateGroup
-            (
-                optionalStart: () => didExecute = true
-            );
-
-            group.Start();
-            group.Update();
-            group.End();
-
-            Assert.IsTrue(didExecute);
-        }
-
-        [TestMethod]
-        public void OptionalEndConstructor()
-        {
-            var didExecute = false;
-            var group = new StateGroup
-            (
-                optionalEnd: () => didExecute = true
-            );
-
-            group.Start();
-            group.Update();
-            group.End();
-
-            Assert.IsTrue(didExecute);
-        }
-
-        [TestMethod]
         public void AllConstructor()
         {
             var startIterations = 0; 

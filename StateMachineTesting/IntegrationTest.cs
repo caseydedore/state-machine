@@ -82,7 +82,7 @@ namespace StateMachineTesting
             root.Update();
 
             Assert.AreEqual(2, sharedSubstate.StartIterations);
-            Assert.AreEqual(2, sharedSubstate.UpdateIterations);
+            Assert.AreEqual(3, sharedSubstate.UpdateIterations);
             Assert.AreEqual(1, sharedSubstate.EndIterations);
         }
 

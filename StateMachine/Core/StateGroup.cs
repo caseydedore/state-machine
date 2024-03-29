@@ -10,11 +10,10 @@ namespace StateMachineCore
 
         public StateGroup
         (
-            Action start = null, Action end = null,
-            Action optionalStart = null, Action optionalEnd = null
+            Action start = null, Action end = null
         )
         {
-            OptionalUpdateState += () =>
+            UpdateState += () =>
             {
                 if (nextState != null)
                 {
@@ -44,9 +43,6 @@ namespace StateMachineCore
                 currentState = null;
                 end?.Invoke();
             };
-
-            OptionalStartState += optionalStart;
-            OptionalEndState += optionalEnd;
         }
 
         public IState Entry { get; set; }
