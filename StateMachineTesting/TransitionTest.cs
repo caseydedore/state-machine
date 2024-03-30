@@ -237,5 +237,22 @@ namespace StateMachineTesting
             Assert.AreEqual(0, state.OptionalUpdateIterations);
             Assert.AreEqual(0, state.OptionalEndIterations);
         }
+
+        [TestMethod]
+        public void TransitionEvalsStopUponFirstSuccess()
+        {
+            var group = new TestStateGroup();
+            var state = new TestState();
+            var stateDest = new TestState();
+            string intentionalNull = null;
+            state.AddTransition(() => true, stateDest);
+            state.AddTransition(() => intentionalNull.Length > 0, stateDest);
+            group.Entry = state;
+
+            group.Start();
+            group.Update();
+
+            //success is no null reference exception thrown
+        }
     }
 }
