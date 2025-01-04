@@ -9,6 +9,7 @@ namespace StateMachineTesting
         public int UpdateIterations { get; protected set; }
         public int OptionalStartIterations { get; protected set; }
         public int OptionalEndIterations { get; protected set; }
+        public int OptionalUpdateIterations { get; protected set; }
 
         public TestStateGroup()
         {
@@ -17,6 +18,7 @@ namespace StateMachineTesting
             UpdateState += () => ++UpdateIterations;
             OptionalStartState += () => ++OptionalStartIterations;
             OptionalEndState += () => ++OptionalEndIterations;
+            OptionalUpdateState += () => ++OptionalUpdateIterations;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using StateMachineCore;
 
 namespace StateMachineTesting
 {
@@ -21,6 +22,7 @@ namespace StateMachineTesting
             Assert.AreEqual(1, state.UpdateIterations);
             Assert.AreEqual(1, group.EndIterations);
             Assert.AreEqual(1, group.OptionalStartIterations);
+            Assert.AreEqual(1, group.OptionalUpdateIterations);
             Assert.AreEqual(1, group.OptionalEndIterations);
         }
 
@@ -157,6 +159,27 @@ namespace StateMachineTesting
             Assert.AreEqual(0, state.OptionalStartIterations);
             Assert.AreEqual(0, state.OptionalUpdateIterations);
             Assert.AreEqual(0, state.OptionalEndIterations);
+        }
+
+        [TestMethod]
+        public void OptionalUpdateAfterChildUpdate()
+        {
+            var didChildUpdate = false;
+            var didGroupOptionalUpdateAfterChild = false;
+            var group = new StateGroup
+            (
+                optionalUpdate: () => didGroupOptionalUpdateAfterChild = didChildUpdate
+            );
+            var state = new TestState
+            (
+                update: () => didChildUpdate = true
+            );
+            group.Entry = state;
+
+            group.Start();
+            group.Update();
+
+            Assert.IsTrue(didGroupOptionalUpdateAfterChild);
         }
     }
 }

@@ -10,8 +10,8 @@ namespace StateMachineCore
 
         public StateGroup
         (
-            Action start = null, Action end = null,
-            Action optionalStart = null, Action optionalEnd = null
+            Action start = null, Action update = null, Action end = null,
+            Action optionalStart = null, Action optionalUpdate = null, Action optionalEnd = null
         )
         {
             OptionalUpdateState += () =>
@@ -29,6 +29,7 @@ namespace StateMachineCore
                     currentState = null;
                     nextState = transition.State;
                 }
+                optionalUpdate?.Invoke();
             };
 
             StartState += () =>
@@ -45,6 +46,7 @@ namespace StateMachineCore
                 end?.Invoke();
             };
 
+            UpdateState += update;
             OptionalStartState += optionalStart;
             OptionalEndState += optionalEnd;
         }

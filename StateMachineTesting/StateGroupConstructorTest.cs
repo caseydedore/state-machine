@@ -87,10 +87,18 @@ namespace StateMachineTesting
         {
             var startIterations = 0; 
             var endIterations = 0;
+            var updateIterations = 0;
+            var optionalStartIterations = 0;
+            var optionalEndIterations = 0;
+            var optionalUpdateIterations = 0;
             var group = new StateGroup
             (
                 start: () => startIterations++,
-                end: () => endIterations++
+                end: () => endIterations++,
+                update: () => updateIterations++,
+                optionalStart: () => optionalStartIterations++,
+                optionalEnd: () => optionalEndIterations++,
+                optionalUpdate: () => optionalUpdateIterations++
             );
 
             group.Start();
@@ -99,6 +107,10 @@ namespace StateMachineTesting
 
             Assert.AreEqual(1, startIterations);
             Assert.AreEqual(1, endIterations);
+            Assert.AreEqual(1, updateIterations);
+            Assert.AreEqual(1, optionalStartIterations);
+            Assert.AreEqual(1, optionalEndIterations);
+            Assert.AreEqual(1, optionalUpdateIterations);
         }
 
         [TestMethod]
