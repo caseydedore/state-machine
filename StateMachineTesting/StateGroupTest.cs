@@ -162,6 +162,50 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
+        public void StartBeforeChild()
+        {
+            var didChildStart = false;
+            var didStartBeforeChild = false;
+            var group = new StateGroup
+            (
+                start: () => didStartBeforeChild = !didChildStart
+            );
+            var child = new State
+            (
+                start: () => didChildStart = true
+            );
+            group.Entry = child;
+
+            group.Start();
+            group.Update();
+            group.End();
+
+            Assert.IsTrue(didStartBeforeChild);
+        }
+
+        [TestMethod]
+        public void EndAfterChild()
+        {
+            var didChildEnd = false;
+            var didEndAfterChild = false;
+            var group = new StateGroup
+            (
+                end: () => didEndAfterChild = didChildEnd
+            );
+            var child = new State
+            (
+                end: () => didChildEnd = true
+            );
+            group.Entry = child;
+
+            group.Start();
+            group.Update();
+            group.End();
+
+            Assert.IsTrue(didEndAfterChild);
+        }
+
+        [TestMethod]
         public void OptionalUpdateAfterChildUpdate()
         {
             var didChildUpdate = false;
