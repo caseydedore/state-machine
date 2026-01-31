@@ -8,8 +8,8 @@ namespace StateMachineCore
 
         public State
         (
-            Action start = null, Action update = null, Action end = null,
-            Action optionalStart = null, Action optionalUpdate = null, Action optionalEnd = null
+            Action? start = null, Action? update = null, Action? end = null,
+            Action? optionalStart = null, Action? optionalUpdate = null, Action? optionalEnd = null
         )
         {
             if (start != null) StartState = start;
@@ -20,7 +20,7 @@ namespace StateMachineCore
             if (optionalEnd != null) OptionalEndState = optionalEnd;
         }
 
-        public StateTransition Update()
+        public StateTransition? Update()
         {
             UpdateState();
             ++iterations;
@@ -68,13 +68,13 @@ namespace StateMachineCore
 
         public void AddTransition(StateTransition transition) => Transitions.Add(transition);
 
-        StateTransition GetFirstSuccessfulTransition() =>
+        StateTransition? GetFirstSuccessfulTransition() =>
             Transitions
                 .Where(t => t.MinimumUpdates <= iterations)
                 .Where(t => t.Condition())
                 .FirstOrDefault();
 
-        StateTransition GetFirstSuccessfulTransitionBeforeCurrentIteration() =>
+        StateTransition? GetFirstSuccessfulTransitionBeforeCurrentIteration() =>
             Transitions
                 .Where(t => t.MinimumUpdates <= iterations - 1)
                 .Where(t => t.Condition())

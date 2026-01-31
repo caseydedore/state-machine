@@ -243,15 +243,16 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var state = new TestState();
             var stateDest = new TestState();
-            string intentionalNull = null;
+            static bool secondTransitionShouldNotEvaluate()
+            {
+                throw new Exception();
+            }
             state.AddTransition(() => true, stateDest);
-            state.AddTransition(() => intentionalNull.Length > 0, stateDest);
+            state.AddTransition(secondTransitionShouldNotEvaluate, stateDest);
             group.Entry = state;
 
             group.Start();
             group.Update();
-
-            //success is no null reference exception thrown
         }
     }
 }

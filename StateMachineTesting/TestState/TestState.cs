@@ -14,8 +14,8 @@ namespace StateMachineTesting
 
         public TestState
         (
-            Action start = null, Action update = null, Action end = null,
-            Action optionalStart = null, Action optionalUpdate = null, Action optionalEnd = null
+            Action? start = null, Action? update = null, Action? end = null,
+            Action? optionalStart = null, Action? optionalUpdate = null, Action? optionalEnd = null
         ) : base
         (
             start, update, end,

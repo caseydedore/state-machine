@@ -5,7 +5,7 @@ namespace StateMachineCore
 	{
         void Start();
         void End();
-        StateTransition Update();
+        StateTransition? Update();
         void AddTransition(Func<bool> checkCondition, IState transitionState);
         void AddTransitionAfter(uint afterUpdates, IState transitionState);
         void AddTransitionAfter(uint afterUpdates, Func<bool> checkCondition, IState transitionState);

@@ -3,13 +3,13 @@ namespace StateMachineCore
 {
 	public class StateGroup : State
 	{
-        IState currentState;
-        IState nextState;
+        IState? currentState;
+        IState? nextState;
 
         public StateGroup
         (
-            Action start = null, Action update = null, Action end = null,
-            Action optionalStart = null, Action optionalUpdate = null, Action optionalEnd = null
+            Action? start = null, Action? update = null, Action? end = null,
+            Action? optionalStart = null, Action? optionalUpdate = null, Action? optionalEnd = null
         )
         {
             OptionalUpdateState += () =>
@@ -49,7 +49,7 @@ namespace StateMachineCore
             OptionalEndState += optionalEnd;
         }
 
-        public IState Entry { get; set; }
+        public IState? Entry { get; set; }
 
         public IState Any { get; } = new State();
     }
