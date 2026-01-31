@@ -1,6 +1,5 @@
 ﻿
 using StateMachineCore;
-using System;
 
 namespace StateMachineTesting
 {

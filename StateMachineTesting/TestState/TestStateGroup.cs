@@ -1,4 +1,5 @@
-﻿using StateMachineCore;
+﻿
+using StateMachineCore;
 
 namespace StateMachineTesting
 {

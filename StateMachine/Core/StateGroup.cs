@@ -1,6 +1,4 @@
 
-using System;
-
 namespace StateMachineCore
 {
 	public class StateGroup : State
