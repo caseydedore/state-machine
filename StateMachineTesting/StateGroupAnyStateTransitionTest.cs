@@ -2,7 +2,7 @@
 namespace StateMachineTesting
 {
     [TestClass]
-    public class AnyStateTransitionTest
+    public class StateGroupAnyStateTransitionTest
     {
         [TestMethod]
         public void AnyStateTransitionFailure()
