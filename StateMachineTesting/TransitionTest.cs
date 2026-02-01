@@ -21,9 +21,10 @@ namespace StateMachineTesting
                 state
             );
             root.AddTransition(transition);
+            root.Entry = state;
 
-            state.Start();
-            state.Update();
+            root.Start();
+            root.Update();
 
             Assert.IsTrue(didCheckTransition);
         }
@@ -175,9 +176,17 @@ namespace StateMachineTesting
             group.Update();
 
             Assert.AreEqual(2, first.StartIterations);
+            Assert.AreEqual(2, first.OptionalStartIterations);
             Assert.AreEqual(2, first.UpdateIterations);
+            Assert.AreEqual(0, first.OptionalUpdateIterations);
+            Assert.AreEqual(2, first.EndIterations);
+            Assert.AreEqual(0, first.OptionalEndIterations);
             Assert.AreEqual(2, second.StartIterations);
+            Assert.AreEqual(2, second.OptionalStartIterations);
             Assert.AreEqual(2, second.UpdateIterations);
+            Assert.AreEqual(0, second.OptionalUpdateIterations);
+            Assert.AreEqual(2, second.EndIterations);
+            Assert.AreEqual(0, second.OptionalEndIterations);
         }
 
         [TestMethod]
@@ -229,6 +238,7 @@ namespace StateMachineTesting
             var state = new TestState();
             group.Entry = state;
             root.AddTransition(() => true, group, destGroup);
+            root.Entry = group;
 
             root.Start();
             root.Update();
@@ -247,9 +257,11 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var state = new TestState();
             var stateDest = new TestState();
-            static bool secondTransitionShouldNotEvaluate()
+            bool didSecondEvaluate = false;
+            bool secondTransitionShouldNotEvaluate()
             {
-                throw new Exception();
+                didSecondEvaluate = true;
+                return true;
             }
             group.AddTransition(() => true, state, stateDest);
             group.AddTransition(secondTransitionShouldNotEvaluate, state, stateDest);
@@ -257,6 +269,8 @@ namespace StateMachineTesting
 
             group.Start();
             group.Update();
+
+            Assert.IsFalse(didSecondEvaluate);
         }
     }
 }

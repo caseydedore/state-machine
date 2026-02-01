@@ -86,7 +86,7 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
-        public void StateTransitionAfterNoUpdate()
+        public void StateTransitionAfterZero()
         {
             var root = new TestStateGroup();
             var first = new TestState();
@@ -103,7 +103,26 @@ namespace StateMachineTesting
             Assert.AreEqual(1, first.EndIterations);
             Assert.AreEqual(1, second.StartIterations);
             Assert.AreEqual(1, second.UpdateIterations);
-            Assert.AreEqual(0, second.EndIterations);
+        }
+
+        [TestMethod]
+        public void StateTransitionAfterOne()
+        {
+            var root = new TestStateGroup();
+            var first = new TestState();
+            var second = new TestState();
+            root.Entry = first;
+            root.AddTransitionAfter(1, first, second);
+
+            root.Start();
+            root.Update();
+            root.Update();
+
+            Assert.AreEqual(1, first.StartIterations);
+            Assert.AreEqual(1, first.UpdateIterations);
+            Assert.AreEqual(1, first.EndIterations);
+            Assert.AreEqual(1, second.StartIterations);
+            Assert.AreEqual(1, second.UpdateIterations);
         }
 
         [TestMethod]
@@ -129,7 +148,6 @@ namespace StateMachineTesting
             Assert.AreEqual(2, second.StartIterations);
             Assert.AreEqual(2, second.UpdateIterations);
             Assert.AreEqual(2, second.EndIterations);
-
         }
     }
 }

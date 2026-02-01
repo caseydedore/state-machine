@@ -71,5 +71,24 @@ namespace StateMachineTesting
             Assert.AreEqual(1, destination.StartIterations);
             Assert.AreEqual(0, anyDestination.StartIterations);
         }
+
+        [TestMethod]
+        public void CorrectDestinationFromManyAnyStateTransitions()
+        {
+            var group = new TestStateGroup();
+            var start = new TestState();
+            var second = new TestState();
+            var destination = new TestState();
+            group.AddTransition(() => false, group.Any, second);
+            group.AddTransition(() => true, group.Any, destination);
+            group.Entry = start;
+
+            group.Start();
+            group.Update();
+            group.Update();
+
+            Assert.AreEqual(0, second.StartIterations);
+            Assert.AreEqual(1, destination.StartIterations);
+        }
     }
 }

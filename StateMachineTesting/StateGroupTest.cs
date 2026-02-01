@@ -111,7 +111,7 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
-        public void ErrantEndNoSubstateEndAgain()
+        public void ErrantEndNoSubstateEnd()
         {
             var group = new TestStateGroup();
             var state = new TestState();
