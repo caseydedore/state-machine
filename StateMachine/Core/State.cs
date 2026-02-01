@@ -2,7 +2,7 @@ namespace StateMachine.Core
 {
     public class State : IState
     {
-        List<StateTransition> Transitions { get; set; } = new List<StateTransition>();
+        List<StateTransition> Transitions { get; set; } = [];
         uint iterations = 0;
 
         public State
