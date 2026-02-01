@@ -1,5 +1,4 @@
-
-namespace StateMachineCore
+namespace StateMachine.Core
 {
     public class State : IState
     {

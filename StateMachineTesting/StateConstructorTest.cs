@@ -1,5 +1,5 @@
 ﻿
-using StateMachineCore;
+using StateMachine.Core;
 
 namespace StateMachineTesting
 {

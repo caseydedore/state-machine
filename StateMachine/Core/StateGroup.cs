@@ -1,5 +1,7 @@
 
-namespace StateMachineCore
+using StateMachine.Core;
+
+namespace StateMachine.Core
 {
 	public class StateGroup : State
 	{

@@ -1,5 +1,5 @@
 ﻿
-using StateMachineCore;
+using StateMachine.Core;
 
 namespace StateMachineTesting
 {
@@ -85,7 +85,7 @@ namespace StateMachineTesting
         [TestMethod]
         public void AllConstructor()
         {
-            var startIterations = 0; 
+            var startIterations = 0;
             var endIterations = 0;
             var updateIterations = 0;
             var optionalStartIterations = 0;

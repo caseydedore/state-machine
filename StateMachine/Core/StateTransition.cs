@@ -1,5 +1,5 @@
 ﻿
-namespace StateMachineCore
+namespace StateMachine.Core
 {
     public class StateTransition
     {
