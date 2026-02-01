@@ -21,7 +21,7 @@ namespace StateMachine.Core
                     currentState = nextState;
                     nextState = null;
                     currentState?.Start();
-                    var allowOptionalStart = GetFirstSuccessfulTransition(currentState) == null;
+                    var allowOptionalStart = GetFirstSuccessfulTransition() == null;
                     if (allowOptionalStart)
                     {
                         currentState?.OptionalStart();
@@ -30,17 +30,16 @@ namespace StateMachine.Core
                 currentState?.Update();
                 currentStateIterations++;
                 var allowOptionalUpdate =
-                    GetFirstSuccessfulTransitionBeforeCurrentIteration(currentState, currentStateIterations) == null;
+                    GetFirstSuccessfulTransitionBeforeCurrentIteration() == null;
                 if (allowOptionalUpdate)
                 {
                     currentState?.OptionalUpdate();
                 }
-                var stateTransition = GetFirstSuccessfulTransition(currentState);
-                var transition = GetFirstSuccessfulTransition(currentState) ?? GetFirstSuccessfulTransition(Any);
+                var transition = GetFirstSuccessfulTransition() ?? GetFirstSuccessfulAnyTransition();
                 if (transition != null)
                 {
                     currentState?.End();
-                    var allowOptionalEnd = GetFirstSuccessfulTransition(currentState) == null;
+                    var allowOptionalEnd = GetFirstSuccessfulTransition() == null;
                     if (allowOptionalEnd)
                     {
                         currentState?.OptionalEnd();
@@ -54,14 +53,14 @@ namespace StateMachine.Core
 
             StartState += () =>
             {
-                start?.Invoke();
                 nextState = Entry;
+                start?.Invoke();
             };
 
             EndState += () =>
             {
                 currentState?.End();
-                var allowOptionalEnd = GetFirstSuccessfulTransition(currentState) == null;
+                var allowOptionalEnd = GetFirstSuccessfulTransition() == null;
                 if (allowOptionalEnd)
                 {
                     currentState?.OptionalEnd();
@@ -97,17 +96,23 @@ namespace StateMachine.Core
 
         public void AddTransition(StateTransition transition) => Transitions.Add(transition);
 
-        StateTransition? GetFirstSuccessfulTransition(IState? from) =>
+        StateTransition? GetFirstSuccessfulTransition() =>
             Transitions
-                .Where(t => t.From == from)
+                .Where(t => t.From == currentState)
                 .Where(t => t.MinimumUpdates <= currentStateIterations)
                 .Where(t => t.Condition())
                 .FirstOrDefault();
 
-        StateTransition? GetFirstSuccessfulTransitionBeforeCurrentIteration(IState? from, uint currentIterations) =>
+        StateTransition? GetFirstSuccessfulAnyTransition() =>
             Transitions
-                .Where(t => t.From == from)
-                .Where(t => t.MinimumUpdates <= currentIterations - 1)
+                .Where(t => t.From == Any)
+                .Where(t => t.Condition())
+                .FirstOrDefault();
+
+        StateTransition? GetFirstSuccessfulTransitionBeforeCurrentIteration() =>
+            Transitions
+                .Where(t => t.From == currentState)
+                .Where(t => t.MinimumUpdates <= currentStateIterations - 1)
                 .Where(t => t.Condition())
                 .FirstOrDefault();
 
