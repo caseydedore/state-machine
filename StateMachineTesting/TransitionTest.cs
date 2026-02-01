@@ -178,13 +178,13 @@ namespace StateMachineTesting
             Assert.AreEqual(2, first.StartIterations);
             Assert.AreEqual(2, first.OptionalStartIterations);
             Assert.AreEqual(2, first.UpdateIterations);
-            Assert.AreEqual(0, first.OptionalUpdateIterations);
+            Assert.AreEqual(2, first.OptionalUpdateIterations);
             Assert.AreEqual(2, first.EndIterations);
             Assert.AreEqual(0, first.OptionalEndIterations);
             Assert.AreEqual(2, second.StartIterations);
             Assert.AreEqual(2, second.OptionalStartIterations);
             Assert.AreEqual(2, second.UpdateIterations);
-            Assert.AreEqual(0, second.OptionalUpdateIterations);
+            Assert.AreEqual(2, second.OptionalUpdateIterations);
             Assert.AreEqual(2, second.EndIterations);
             Assert.AreEqual(0, second.OptionalEndIterations);
         }
