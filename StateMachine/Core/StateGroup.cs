@@ -20,29 +20,38 @@ namespace StateMachine.Core
                 {
                     currentState = nextState;
                     nextState = null;
-                    currentState?.Start();
                     var allowOptionalStart = GetFirstSuccessfulTransition() == null;
                     if (allowOptionalStart)
                     {
-                        currentState?.OptionalStart();
+                        currentState?.Start();
+                    }
+                    else
+                    {
+                        currentState?.StartSkipOptional();
                     }
                 }
-                currentState?.Update();
                 currentStateIterations++;
                 var allowOptionalUpdate =
                     GetFirstSuccessfulTransitionBeforeCurrentIteration() == null;
                 if (allowOptionalUpdate)
                 {
-                    currentState?.OptionalUpdate();
+                    currentState?.Update();
+                }
+                else
+                {
+                    currentState?.UpdateSkipOptional();
                 }
                 var transition = GetFirstSuccessfulTransition() ?? GetFirstSuccessfulAnyTransition();
                 if (transition != null)
                 {
-                    currentState?.End();
                     var allowOptionalEnd = GetFirstSuccessfulTransition() == null;
                     if (allowOptionalEnd)
                     {
-                        currentState?.OptionalEnd();
+                        currentState?.End();
+                    }
+                    else
+                    {
+                        currentState?.EndSkipOptional();
                     }
                     currentState = null;
                     currentStateIterations = 0;
@@ -59,11 +68,14 @@ namespace StateMachine.Core
 
             EndState += () =>
             {
-                currentState?.End();
                 var allowOptionalEnd = GetFirstSuccessfulTransition() == null;
                 if (allowOptionalEnd)
                 {
-                    currentState?.OptionalEnd();
+                    currentState?.End();
+                }
+                else
+                {
+                   currentState?.EndSkipOptional();
                 }
                 currentState = null;
                 currentStateIterations = 0;

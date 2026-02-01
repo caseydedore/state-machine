@@ -6,8 +6,8 @@ namespace StateMachine.Core
         void Start();
         void End();
         void Update();
-        void OptionalStart();
-        void OptionalEnd();
-        void OptionalUpdate();
+        void StartSkipOptional();
+        void EndSkipOptional();
+        void UpdateSkipOptional();
     }
 }

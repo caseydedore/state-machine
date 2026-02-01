@@ -16,17 +16,29 @@ namespace StateMachine.Core
             if (optionalEnd != null) OptionalEndState = optionalEnd;
         }
 
-        public void Start() => StartState();
+        public void Start()
+        {
+            StartState();
+            OptionalStartState();
+        }
 
-        public void End() => EndState();
+        public void StartSkipOptional() => StartState();
 
-        public void Update() => UpdateState();
+        public void End()
+        {
+            EndState();
+            OptionalEndState();
+        }
 
-        public void OptionalStart() => OptionalStartState();
+        public void EndSkipOptional() => EndState();
 
-        public void OptionalEnd() => OptionalEndState();
+        public void Update()
+        {
+            UpdateState();
+            OptionalUpdateState();
+        }
 
-        public void OptionalUpdate() => OptionalUpdateState();
+        public void UpdateSkipOptional() => UpdateState();
 
         protected event Action StartState = () => { };
         protected event Action EndState = () => { };

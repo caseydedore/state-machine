@@ -38,11 +38,8 @@ namespace StateMachineTesting
             );
 
             group.Start();
-            group.OptionalStart();
             group.Update();
-            group.OptionalUpdate();
             group.End();
-            group.OptionalEnd();
 
             Assert.AreEqual(1, startIterations);
             Assert.AreEqual(1, endIterations);

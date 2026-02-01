@@ -14,11 +14,8 @@ namespace StateMachineTesting
             group.Entry = state;
 
             group.Start();
-            group.OptionalStart();
             group.Update();
-            group.OptionalUpdate();
             group.End();
-            group.OptionalEnd();
 
             Assert.AreEqual(1, group.StartIterations);
             Assert.AreEqual(1, state.UpdateIterations);

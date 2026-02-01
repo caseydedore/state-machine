@@ -39,11 +39,8 @@ namespace StateMachineTesting
             );
 
             state.Start();
-            state.OptionalStart();
             state.Update();
-            state.OptionalUpdate();
             state.End();
-            state.OptionalEnd();
 
             Assert.IsTrue(startFired);
             Assert.IsTrue(updateFired);
