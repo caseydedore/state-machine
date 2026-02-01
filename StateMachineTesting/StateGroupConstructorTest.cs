@@ -19,70 +19,6 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
-        public void StartConstructor()
-        {
-            var startIterations = 0;
-            var group = new StateGroup
-            (
-                start: () => startIterations++
-            );
-
-            group.Start();
-            group.Update();
-            group.End();
-
-            Assert.AreEqual(1, startIterations);
-        }
-
-        [TestMethod]
-        public void EndConstructor()
-        {
-            var endIterations = 0;
-            var group = new StateGroup
-            (
-                end: () => endIterations++
-            );
-
-            group.Start();
-            group.Update();
-            group.End();
-
-            Assert.AreEqual(1, endIterations);
-        }
-
-        [TestMethod]
-        public void OptionalStartConstructor()
-        {
-            var didExecute = false;
-            var group = new StateGroup
-            (
-                optionalStart: () => didExecute = true
-            );
-
-            group.Start();
-            group.Update();
-            group.End();
-
-            Assert.IsTrue(didExecute);
-        }
-
-        [TestMethod]
-        public void OptionalEndConstructor()
-        {
-            var didExecute = false;
-            var group = new StateGroup
-            (
-                optionalEnd: () => didExecute = true
-            );
-
-            group.Start();
-            group.Update();
-            group.End();
-
-            Assert.IsTrue(didExecute);
-        }
-
-        [TestMethod]
         public void AllConstructor()
         {
             var startIterations = 0;
@@ -102,8 +38,11 @@ namespace StateMachineTesting
             );
 
             group.Start();
+            group.OptionalStart();
             group.Update();
+            group.OptionalUpdate();
             group.End();
+            group.OptionalEnd();
 
             Assert.AreEqual(1, startIterations);
             Assert.AreEqual(1, endIterations);

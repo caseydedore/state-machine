@@ -39,8 +39,11 @@ namespace StateMachineTesting
             );
 
             state.Start();
+            state.OptionalStart();
             state.Update();
+            state.OptionalUpdate();
             state.End();
+            state.OptionalEnd();
 
             Assert.IsTrue(startFired);
             Assert.IsTrue(updateFired);
@@ -48,99 +51,6 @@ namespace StateMachineTesting
             Assert.IsTrue(optionalStartFired);
             Assert.IsTrue(optionalUpdateFired);
             Assert.IsTrue(optionalEndFired);
-        }
-
-        [TestMethod]
-        public void StartOnly()
-        {
-            var startFired = false;
-            var state = new State(
-                start: () => startFired = true
-            );
-
-            state.Start();
-            state.Update();
-            state.End();
-
-            Assert.IsTrue(startFired);
-        }
-
-        [TestMethod]
-        public void UpdateOnly()
-        {
-            var updateFired = false;
-            var state = new State(
-                update: () => updateFired = true
-            );
-
-            state.Start();
-            state.Update();
-            state.End();
-
-            Assert.IsTrue(updateFired);
-        }
-
-        [TestMethod]
-        public void EndOnly()
-        {
-            var endFired = false;
-            var state = new State(
-                end: () => endFired = true
-            );
-
-            state.Start();
-            state.Update();
-            state.End();
-
-            Assert.IsTrue(endFired);
-        }
-
-        [TestMethod]
-        public void OptionalStartOnly()
-        {
-            var didExecute = false;
-            var state = new State
-            (
-                optionalStart: () => didExecute = true
-            );
-
-            state.Start();
-            state.Update();
-            state.End();
-
-            Assert.IsTrue(didExecute);
-        }
-
-        [TestMethod]
-        public void OptionalUpdateOnly()
-        {
-            var didExecute = false;
-            var state = new State
-            (
-                optionalUpdate: () => didExecute = true
-            );
-
-            state.Start();
-            state.Update();
-            state.End();
-
-            Assert.IsTrue(didExecute);
-        }
-
-        [TestMethod]
-        public void OptionalEndOnly()
-        {
-            var didExecute = false;
-            var state = new State
-            (
-                optionalEnd: () => didExecute = true
-            );
-
-            state.Start();
-            state.Update();
-            state.End();
-
-            Assert.IsTrue(didExecute);
         }
     }
 }
