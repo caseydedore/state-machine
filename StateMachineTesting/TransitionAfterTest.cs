@@ -90,12 +90,12 @@ namespace StateMachineTesting
 
             root.Start();
             root.Update();
-            root.Update();
 
             Assert.AreEqual(1, state.StartIterations);
             Assert.AreEqual(1, state.UpdateIterations);
             Assert.AreEqual(1, state.OptionalStartIterations);
             Assert.AreEqual(1, state.OptionalUpdateIterations);
+            Assert.AreEqual(0, nextState.StartIterations);
         }
 
         [TestMethod]
