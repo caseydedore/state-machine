@@ -12,7 +12,7 @@ namespace StateMachineTesting
             var startGroup = new TestStateGroup();
             var destGroup = new TestStateGroup();
             rootGroup.Entry = startGroup;
-            startGroup.AddTransition(() => shouldTransition, destGroup);
+            rootGroup.AddTransition(() => shouldTransition, startGroup, destGroup);
             var startState = new TestState
             (
                 update: () => shouldTransition = true
@@ -40,7 +40,7 @@ namespace StateMachineTesting
             var startGroup = new TestStateGroup();
             var destGroup = new TestStateGroup();
             rootGroup.Entry = startGroup;
-            startGroup.AddTransition(() => shouldTransition, destGroup);
+            rootGroup.AddTransition(() => shouldTransition, startGroup, destGroup);
             var startState = new TestState
             (
                 update: () => shouldTransition = true
@@ -69,7 +69,7 @@ namespace StateMachineTesting
             var dest = new TestStateGroup();
             root.Entry = start;
             var willTransition = false;
-            start.AddTransition(() => willTransition, dest);
+            root.AddTransition(() => willTransition, start, dest);
             var sharedSubstate = new TestState();
             start.Entry = sharedSubstate;
             dest.Entry = sharedSubstate;
@@ -92,7 +92,7 @@ namespace StateMachineTesting
             var first = new TestState();
             var second = new TestState();
             root.Entry = first;
-            first.AddTransitionAfter(0, second);
+            root.AddTransitionAfter(0, first, second);
 
             root.Start();
             root.Update();
@@ -113,8 +113,8 @@ namespace StateMachineTesting
             var first = new TestState();
             var second = new TestState();
             root.Entry = first;
-            first.AddTransitionAfter(1, second);
-            second.AddTransitionAfter(1, first);
+            root.AddTransitionAfter(1, first, second);
+            root.AddTransitionAfter(1, second, first);
 
             root.Start();
             root.Update();

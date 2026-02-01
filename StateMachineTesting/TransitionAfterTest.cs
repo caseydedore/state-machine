@@ -7,14 +7,15 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionAfterNoUpdate()
         {
+            var root = new TestStateGroup();
             var state = new TestState();
             var nextState = new TestState();
-            state.AddTransitionAfter(0, nextState);
+            root.AddTransitionAfter(0, state, nextState);
+            root.Entry = state;
 
-            state.Start();
-            var transition = state.Update();
+            root.Start();
+            root.Update();
 
-            Assert.IsNotNull(transition);
             Assert.AreEqual(1, state.StartIterations);
             Assert.AreEqual(1, state.UpdateIterations);
             Assert.AreEqual(0, state.OptionalStartIterations);
@@ -24,14 +25,15 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionAfterOneUpdate()
         {
+            var root = new TestStateGroup();
             var state = new TestState();
             var nextState = new TestState();
-            state.AddTransitionAfter(1, nextState);
+            root.AddTransitionAfter(1, state, nextState);
+            root.Entry = state;
 
-            state.Start();
-            var first = state.Update();
+            root.Start();
+            root.Update();
 
-            Assert.IsNotNull(first);
             Assert.AreEqual(1, state.StartIterations);
             Assert.AreEqual(1, state.UpdateIterations);
             Assert.AreEqual(1, state.OptionalStartIterations);
@@ -41,16 +43,16 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionAfterTwoUpdates()
         {
+            var root = new TestStateGroup();
             var state = new TestState();
             var nextState = new TestState();
-            state.AddTransitionAfter(2, nextState);
+            root.AddTransitionAfter(2, state, nextState);
+            root.Entry = state;
 
-            state.Start();
-            var first = state.Update();
-            var second = state.Update();
+            root.Start();
+            root.Update();
+            root.Update();
 
-            Assert.IsNull(first);
-            Assert.IsNotNull(second);
             Assert.AreEqual(1, state.StartIterations);
             Assert.AreEqual(2, state.UpdateIterations);
             Assert.AreEqual(1, state.OptionalStartIterations);
@@ -60,14 +62,15 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionAfterConditionSuccess()
         {
+            var root = new TestStateGroup();
             var state = new TestState();
             var nextState = new TestState();
-            state.AddTransitionAfter(0, () => true, nextState);
+            root.AddTransitionAfter(0, () => true, state, nextState);
+            root.Entry = state;
 
-            state.Start();
-            var first = state.Update();
+            root.Start();
+            root.Update();
 
-            Assert.IsNotNull(first);
             Assert.AreEqual(1, state.StartIterations);
             Assert.AreEqual(1, state.UpdateIterations);
             Assert.AreEqual(0, state.OptionalStartIterations);
@@ -77,14 +80,15 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionAfterConditionFailure()
         {
+            var root = new TestStateGroup();
             var state = new TestState();
             var nextState = new TestState();
-            state.AddTransitionAfter(0, () => false, nextState);
+            root.AddTransitionAfter(0, () => false, state, nextState);
+            root.Entry = state;
 
-            state.Start();
-            var first = state.Update();
+            root.Start();
+            root.Update();
 
-            Assert.IsNull(first);
             Assert.AreEqual(1, state.StartIterations);
             Assert.AreEqual(1, state.UpdateIterations);
             Assert.AreEqual(1, state.OptionalStartIterations);
@@ -94,14 +98,15 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionAfterOneUpdateConditionSuccess()
         {
+            var root = new TestStateGroup();
             var state = new TestState();
             var nextState = new TestState();
-            state.AddTransitionAfter(1, () => true, nextState);
+            root.AddTransitionAfter(1, () => true, state, nextState);
+            root.Entry = state;
 
-            state.Start();
-            var first = state.Update();
+            root.Start();
+            root.Update();
 
-            Assert.IsNotNull(first);
             Assert.AreEqual(1, state.StartIterations);
             Assert.AreEqual(1, state.UpdateIterations);
             Assert.AreEqual(1, state.OptionalStartIterations);
@@ -111,16 +116,16 @@ namespace StateMachineTesting
         [TestMethod]
         public void TransitionAfterOneUpdateConditionFailure()
         {
+            var root = new TestStateGroup();
             var state = new TestState();
             var nextState = new TestState();
-            state.AddTransitionAfter(1, () => false, nextState);
+            root.AddTransitionAfter(1, () => false, state, nextState);
+            root.Entry = state;
 
-            state.Start();
-            var first = state.Update();
-            var second = state.Update();
+            root.Start();
+            root.Update();
+            root.Update();
 
-            Assert.IsNull(first);
-            Assert.IsNull(second);
             Assert.AreEqual(1, state.StartIterations);
             Assert.AreEqual(2, state.UpdateIterations);
             Assert.AreEqual(1, state.OptionalStartIterations);
