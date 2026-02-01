@@ -55,7 +55,7 @@ namespace StateMachine.Core
                     }
                     currentState = null;
                     currentStateIterations = 0;
-                    nextState = transition.From;
+                    nextState = transition.To;
                 }
                 optionalUpdate?.Invoke();
             };
@@ -110,20 +110,20 @@ namespace StateMachine.Core
 
         StateTransition? GetFirstSuccessfulTransition() =>
             Transitions
-                .Where(t => t.From == currentState)
+                .Where(t => ReferenceEquals(t.From, currentState))
                 .Where(t => t.MinimumUpdates <= currentStateIterations)
                 .Where(t => t.Condition())
                 .FirstOrDefault();
 
         StateTransition? GetFirstSuccessfulAnyTransition() =>
             Transitions
-                .Where(t => t.From == Any)
+                .Where(t => ReferenceEquals(t.From, Any))
                 .Where(t => t.Condition())
                 .FirstOrDefault();
 
         StateTransition? GetFirstSuccessfulTransitionBeforeCurrentIteration() =>
             Transitions
-                .Where(t => t.From == currentState)
+                .Where(t => ReferenceEquals(t.From, currentState))
                 .Where(t => t.MinimumUpdates <= currentStateIterations - 1)
                 .Where(t => t.Condition())
                 .FirstOrDefault();
