@@ -133,36 +133,3 @@ namespace StateMachine.Core
         public IState Any { get; } = new State();
     }
 }
-
-
-
-// Previously in State
-/*
-        public void Update()
-        {
-            UpdateState();
-            ++iterations;
-            var ignoreIterationTransition = GetFirstSuccessfulTransitionBeforeCurrentIteration();
-            if (ignoreIterationTransition == null)
-                OptionalUpdateState();
-            var transition = GetFirstSuccessfulTransition();
-            return transition;
-        }
-
-        public void Start()
-        {
-            StartState();
-            var transition = GetFirstSuccessfulTransition();
-            if (transition == null)
-                OptionalStartState();
-        }
-
-        public void End()
-        {
-            EndState();
-            var transition = GetFirstSuccessfulTransition();
-            if (transition == null)
-                OptionalEndState();
-            iterations = 0;
-        }
-*/
