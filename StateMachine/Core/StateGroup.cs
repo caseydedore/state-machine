@@ -44,15 +44,7 @@ namespace StateMachine.Core
                 var transition = GetFirstSuccessfulTransition() ?? GetFirstSuccessfulAnyTransition();
                 if (transition != null)
                 {
-                    var allowOptionalEnd = GetFirstSuccessfulTransition() == null;
-                    if (allowOptionalEnd)
-                    {
-                        currentState?.End();
-                    }
-                    else
-                    {
-                        currentState?.EndSkipOptional();
-                    }
+                    currentState?.EndSkipOptional();
                     currentState = null;
                     currentStateIterations = 0;
                     nextState = transition.To;
