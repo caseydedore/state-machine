@@ -1,94 +1,93 @@
 ﻿
-namespace StateMachineTesting
+namespace StateMachineTesting;
+
+[TestClass]
+public class StateGroupAnyStateTransitionTest
 {
-    [TestClass]
-    public class StateGroupAnyStateTransitionTest
+    [TestMethod]
+    public void AnyStateTransitionFailure()
     {
-        [TestMethod]
-        public void AnyStateTransitionFailure()
-        {
-            var group = new TestStateGroup();
-            var start = new TestState();
-            var attemptedDestination = new TestState();
-            group.AddAnyTransition(attemptedDestination, () => false);
-            group.Entry = start;
+        var group = new TestStateGroup();
+        var start = new TestState();
+        var attemptedDestination = new TestState();
+        group.AddAnyTransition(attemptedDestination, () => false);
+        group.Entry = start;
 
-            group.Start();
-            group.Update();
+        group.Start();
+        group.Update();
 
-            Assert.AreEqual(0, start.EndIterations);
-        }
+        Assert.AreEqual(0, start.EndIterations);
+    }
 
-        [TestMethod]
-        public void AnyStateTransitionSuccess()
-        {
-            var group = new TestStateGroup();
-            var start = new TestState();
-            var destination = new TestState();
-            group.AddAnyTransition(destination, () => true);
-            group.Entry = start;
+    [TestMethod]
+    public void AnyStateTransitionSuccess()
+    {
+        var group = new TestStateGroup();
+        var start = new TestState();
+        var destination = new TestState();
+        group.AddAnyTransition(destination, () => true);
+        group.Entry = start;
 
-            group.Start();
-            group.Update();
-            group.Update();
+        group.Start();
+        group.Update();
+        group.Update();
 
-            Assert.AreEqual(1, start.EndIterations);
-            Assert.AreEqual(1, destination.StartIterations);
-        }
+        Assert.AreEqual(1, start.EndIterations);
+        Assert.AreEqual(1, destination.StartIterations);
+    }
 
-        [TestMethod]
-        public void AnyStateTransitionNotAffectGroup()
-        {
-            var group = new TestStateGroup();
-            var start = new TestState();
-            var destination = new TestState();
-            group.AddAnyTransition(destination, () => true);
-            group.Entry = start;
+    [TestMethod]
+    public void AnyStateTransitionNotAffectGroup()
+    {
+        var group = new TestStateGroup();
+        var start = new TestState();
+        var destination = new TestState();
+        group.AddAnyTransition(destination, () => true);
+        group.Entry = start;
 
-            group.Start();
-            group.Update();
-            group.Update();
+        group.Start();
+        group.Update();
+        group.Update();
 
-            Assert.AreEqual(2, group.UpdateIterations);
-            Assert.AreEqual(0, group.EndIterations);
-        }
+        Assert.AreEqual(2, group.UpdateIterations);
+        Assert.AreEqual(0, group.EndIterations);
+    }
 
-        [TestMethod]
-        public void StateTransitionPriorityOverAnyStateTransition()
-        {
-            var group = new TestStateGroup();
-            var start = new TestState();
-            var destination = new TestState();
-            var anyDestination = new TestState();
-            group.AddTransition(start, destination, () => true);
-            group.AddAnyTransition(anyDestination, () => true);
-            group.Entry = start;
+    [TestMethod]
+    public void StateTransitionPriorityOverAnyStateTransition()
+    {
+        var group = new TestStateGroup();
+        var start = new TestState();
+        var destination = new TestState();
+        var anyDestination = new TestState();
+        group.AddTransition(start, destination, () => true);
+        group.AddAnyTransition(anyDestination, () => true);
+        group.Entry = start;
 
-            group.Start();
-            group.Update();
-            group.Update();
+        group.Start();
+        group.Update();
+        group.Update();
 
-            Assert.AreEqual(1, destination.StartIterations);
-            Assert.AreEqual(0, anyDestination.StartIterations);
-        }
+        Assert.AreEqual(1, destination.StartIterations);
+        Assert.AreEqual(0, anyDestination.StartIterations);
+    }
 
-        [TestMethod]
-        public void CorrectDestinationFromManyAnyStateTransitions()
-        {
-            var group = new TestStateGroup();
-            var start = new TestState();
-            var second = new TestState();
-            var destination = new TestState();
-            group.AddAnyTransition(second, () => false);
-            group.AddAnyTransition(destination, () => true);
-            group.Entry = start;
+    [TestMethod]
+    public void CorrectDestinationFromManyAnyStateTransitions()
+    {
+        var group = new TestStateGroup();
+        var start = new TestState();
+        var second = new TestState();
+        var destination = new TestState();
+        group.AddAnyTransition(second, () => false);
+        group.AddAnyTransition(destination, () => true);
+        group.Entry = start;
 
-            group.Start();
-            group.Update();
-            group.Update();
+        group.Start();
+        group.Update();
+        group.Update();
 
-            Assert.AreEqual(0, second.StartIterations);
-            Assert.AreEqual(1, destination.StartIterations);
-        }
+        Assert.AreEqual(0, second.StartIterations);
+        Assert.AreEqual(1, destination.StartIterations);
     }
 }

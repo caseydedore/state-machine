@@ -1,13 +1,12 @@
 ﻿
-namespace StateMachine.Core
+namespace StateMachine.Core;
+
+public interface IState
 {
-	public interface IState
-	{
-        void Start();
-        void End();
-        void Update();
-        void StartSkipOptional();
-        void EndSkipOptional();
-        void UpdateSkipOptional();
-    }
+    void Start();
+    void End();
+    void Update();
+    void StartSkipOptional();
+    void EndSkipOptional();
+    void UpdateSkipOptional();
 }

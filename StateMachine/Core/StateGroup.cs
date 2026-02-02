@@ -1,144 +1,143 @@
 
-namespace StateMachine.Core
+namespace StateMachine.Core;
+
+public class StateGroup : State
 {
-	public class StateGroup : State
-	{
-        IState? currentState;
-        IState? nextState;
-        uint currentStateIterations = 0;
-        List<StateTransition> Transitions { get; set; } = [];
-        IState Any { get; } = new State();
+    IState? currentState;
+    IState? nextState;
+    uint currentStateIterations = 0;
+    List<StateTransition> Transitions { get; set; } = [];
+    IState Any { get; } = new State();
 
-        public StateGroup
-        (
-            Action? start = null, Action? update = null, Action? end = null,
-            Action? optionalStart = null, Action? optionalUpdate = null, Action? optionalEnd = null
-        )
+    public StateGroup
+    (
+        Action? start = null, Action? update = null, Action? end = null,
+        Action? optionalStart = null, Action? optionalUpdate = null, Action? optionalEnd = null
+    )
+    {
+        OptionalUpdateState += () =>
         {
-            OptionalUpdateState += () =>
+            if (nextState != null)
             {
-                if (nextState != null)
+                currentState = nextState;
+                nextState = null;
+                var allowOptionalStart = GetFirstSuccessfulTransition() == null;
+                if (allowOptionalStart)
                 {
-                    currentState = nextState;
-                    nextState = null;
-                    var allowOptionalStart = GetFirstSuccessfulTransition() == null;
-                    if (allowOptionalStart)
-                    {
-                        currentState?.Start();
-                    }
-                    else
-                    {
-                        currentState?.StartSkipOptional();
-                    }
-                }
-                currentStateIterations++;
-                var allowOptionalUpdate =
-                    GetFirstSuccessfulTransitionBeforeCurrentIteration() == null;
-                if (allowOptionalUpdate)
-                {
-                    currentState?.Update();
+                    currentState?.Start();
                 }
                 else
                 {
-                    currentState?.UpdateSkipOptional();
+                    currentState?.StartSkipOptional();
                 }
-                var transition = GetFirstSuccessfulTransition() ?? GetFirstSuccessfulAnyTransition();
-                if (transition != null)
-                {
-                    currentState?.EndSkipOptional();
-                    currentState = null;
-                    currentStateIterations = 0;
-                    nextState = transition.To;
-                }
-                optionalUpdate?.Invoke();
-            };
-
-            StartState += () =>
+            }
+            currentStateIterations++;
+            var allowOptionalUpdate =
+                GetFirstSuccessfulTransitionBeforeCurrentIteration() == null;
+            if (allowOptionalUpdate)
             {
-                nextState = Entry;
-                start?.Invoke();
-            };
-
-            EndState += () =>
+                currentState?.Update();
+            }
+            else
             {
-                var allowOptionalEnd = GetFirstSuccessfulTransition() == null;
-                if (allowOptionalEnd)
-                {
-                    currentState?.End();
-                }
-                else
-                {
-                   currentState?.EndSkipOptional();
-                }
+                currentState?.UpdateSkipOptional();
+            }
+            var transition = GetFirstSuccessfulTransition() ?? GetFirstSuccessfulAnyTransition();
+            if (transition != null)
+            {
+                currentState?.EndSkipOptional();
                 currentState = null;
                 currentStateIterations = 0;
-                nextState = null;
-                end?.Invoke();
-            };
+                nextState = transition.To;
+            }
+            optionalUpdate?.Invoke();
+        };
 
-            UpdateState += update;
-            OptionalStartState += optionalStart;
-            OptionalEndState += optionalEnd;
-        }
-
-        public void AddTransitionAfter(uint numberOfUpdates, IState from, IState to)
+        StartState += () =>
         {
-            var transition = new StateTransition(numberOfUpdates, from, to);
-            AddTransition(transition);
-        }
+            nextState = Entry;
+            start?.Invoke();
+        };
 
-        public void AddTransitionAfter(uint numberOfUpdates, IState from, IState to, Func<bool> condition)
+        EndState += () =>
         {
-            var transition = new StateTransition(numberOfUpdates, from, to, condition);
-            AddTransition(transition);
-        }
+            var allowOptionalEnd = GetFirstSuccessfulTransition() == null;
+            if (allowOptionalEnd)
+            {
+                currentState?.End();
+            }
+            else
+            {
+               currentState?.EndSkipOptional();
+            }
+            currentState = null;
+            currentStateIterations = 0;
+            nextState = null;
+            end?.Invoke();
+        };
 
-        public void AddTransition(IState from, IState to, Func<bool> condition)
-        {
-            var transition = new StateTransition(from, to, condition);
-            AddTransition(transition);
-        }
-
-        public void AddTransition(StateTransition transition) => Transitions.Add(transition);
-
-        public void AddAnyTransitionAfter(uint numberOfUpdates, IState to)
-        {
-            var transition = new StateTransition(numberOfUpdates, Any, to);
-            AddTransition(transition);
-        }
-
-        public void AddAnyTransitionAfter(uint numberOfUpdates, IState to, Func<bool> condition)
-        {
-            var transition = new StateTransition(numberOfUpdates, Any, to, condition);
-            AddTransition(transition);
-        }
-
-        public void AddAnyTransition(IState to, Func<bool> condition)
-        {
-            var transition = new StateTransition(Any, to, condition);
-            AddTransition(transition);
-        }
-
-        StateTransition? GetFirstSuccessfulTransition() =>
-            Transitions
-                .Where(t => ReferenceEquals(t.From, currentState))
-                .Where(t => t.MinimumUpdates <= currentStateIterations)
-                .Where(t => t.Condition())
-                .FirstOrDefault();
-
-        StateTransition? GetFirstSuccessfulAnyTransition() =>
-            Transitions
-                .Where(t => ReferenceEquals(t.From, Any))
-                .Where(t => t.Condition())
-                .FirstOrDefault();
-
-        StateTransition? GetFirstSuccessfulTransitionBeforeCurrentIteration() =>
-            Transitions
-                .Where(t => ReferenceEquals(t.From, currentState))
-                .Where(t => t.MinimumUpdates <= currentStateIterations - 1)
-                .Where(t => t.Condition())
-                .FirstOrDefault();
-
-        public IState? Entry { get; set; }
+        UpdateState += update;
+        OptionalStartState += optionalStart;
+        OptionalEndState += optionalEnd;
     }
+
+    public void AddTransitionAfter(uint numberOfUpdates, IState from, IState to)
+    {
+        var transition = new StateTransition(numberOfUpdates, from, to);
+        AddTransition(transition);
+    }
+
+    public void AddTransitionAfter(uint numberOfUpdates, IState from, IState to, Func<bool> condition)
+    {
+        var transition = new StateTransition(numberOfUpdates, from, to, condition);
+        AddTransition(transition);
+    }
+
+    public void AddTransition(IState from, IState to, Func<bool> condition)
+    {
+        var transition = new StateTransition(from, to, condition);
+        AddTransition(transition);
+    }
+
+    public void AddTransition(StateTransition transition) => Transitions.Add(transition);
+
+    public void AddAnyTransitionAfter(uint numberOfUpdates, IState to)
+    {
+        var transition = new StateTransition(numberOfUpdates, Any, to);
+        AddTransition(transition);
+    }
+
+    public void AddAnyTransitionAfter(uint numberOfUpdates, IState to, Func<bool> condition)
+    {
+        var transition = new StateTransition(numberOfUpdates, Any, to, condition);
+        AddTransition(transition);
+    }
+
+    public void AddAnyTransition(IState to, Func<bool> condition)
+    {
+        var transition = new StateTransition(Any, to, condition);
+        AddTransition(transition);
+    }
+
+    StateTransition? GetFirstSuccessfulTransition() =>
+        Transitions
+            .Where(t => ReferenceEquals(t.From, currentState))
+            .Where(t => t.MinimumUpdates <= currentStateIterations)
+            .Where(t => t.Condition())
+            .FirstOrDefault();
+
+    StateTransition? GetFirstSuccessfulAnyTransition() =>
+        Transitions
+            .Where(t => ReferenceEquals(t.From, Any))
+            .Where(t => t.Condition())
+            .FirstOrDefault();
+
+    StateTransition? GetFirstSuccessfulTransitionBeforeCurrentIteration() =>
+        Transitions
+            .Where(t => ReferenceEquals(t.From, currentState))
+            .Where(t => t.MinimumUpdates <= currentStateIterations - 1)
+            .Where(t => t.Condition())
+            .FirstOrDefault();
+
+    public IState? Entry { get; set; }
 }

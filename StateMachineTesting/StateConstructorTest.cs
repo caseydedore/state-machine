@@ -1,53 +1,52 @@
 ﻿
 using StateMachine.Core;
 
-namespace StateMachineTesting
+namespace StateMachineTesting;
+
+[TestClass]
+public class StateConstructorTest
 {
-    [TestClass]
-    public class StateConstructorTest
+    [TestMethod]
+    public void EmptyConstructor()
     {
-        [TestMethod]
-        public void EmptyConstructor()
-        {
-            var state = new State();
+        var state = new State();
 
-            state.Start();
-            state.Update();
-            state.End();
+        state.Start();
+        state.Update();
+        state.End();
 
-            //success if no exception thrown
-        }
+        //success if no exception thrown
+    }
 
-        [TestMethod]
-        public void AllConstructor()
-        {
-            bool startFired = false,
-                updateFired = false,
-                endFired = false,
-                optionalStartFired = false,
-                optionalUpdateFired = false,
-                optionalEndFired = false;
+    [TestMethod]
+    public void AllConstructor()
+    {
+        bool startFired = false,
+            updateFired = false,
+            endFired = false,
+            optionalStartFired = false,
+            optionalUpdateFired = false,
+            optionalEndFired = false;
 
-            var state = new State
-            (
-                start: () => startFired = true,
-                update: () => updateFired = true,
-                end: () => endFired = true,
-                optionalStart: () => optionalStartFired = true,
-                optionalUpdate: () => optionalUpdateFired = true,
-                optionalEnd: () => optionalEndFired = true
-            );
+        var state = new State
+        (
+            start: () => startFired = true,
+            update: () => updateFired = true,
+            end: () => endFired = true,
+            optionalStart: () => optionalStartFired = true,
+            optionalUpdate: () => optionalUpdateFired = true,
+            optionalEnd: () => optionalEndFired = true
+        );
 
-            state.Start();
-            state.Update();
-            state.End();
+        state.Start();
+        state.Update();
+        state.End();
 
-            Assert.IsTrue(startFired);
-            Assert.IsTrue(updateFired);
-            Assert.IsTrue(endFired);
-            Assert.IsTrue(optionalStartFired);
-            Assert.IsTrue(optionalUpdateFired);
-            Assert.IsTrue(optionalEndFired);
-        }
+        Assert.IsTrue(startFired);
+        Assert.IsTrue(updateFired);
+        Assert.IsTrue(endFired);
+        Assert.IsTrue(optionalStartFired);
+        Assert.IsTrue(optionalUpdateFired);
+        Assert.IsTrue(optionalEndFired);
     }
 }

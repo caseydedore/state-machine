@@ -1,52 +1,51 @@
 ﻿
 using StateMachine.Core;
 
-namespace StateMachineTesting
+namespace StateMachineTesting;
+
+[TestClass]
+public class StateGroupConstructorTest
 {
-    [TestClass]
-    public class StateGroupConstructorTest
+    [TestMethod]
+    public void EmptyConstructor()
     {
-        [TestMethod]
-        public void EmptyConstructor()
-        {
-            var group = new StateGroup();
+        var group = new StateGroup();
 
-            group.Start();
-            group.Update();
-            group.End();
+        group.Start();
+        group.Update();
+        group.End();
 
-            //success is no exception thrown
-        }
+        //success is no exception thrown
+    }
 
-        [TestMethod]
-        public void AllConstructor()
-        {
-            var startIterations = 0;
-            var endIterations = 0;
-            var updateIterations = 0;
-            var optionalStartIterations = 0;
-            var optionalEndIterations = 0;
-            var optionalUpdateIterations = 0;
-            var group = new StateGroup
-            (
-                start: () => startIterations++,
-                end: () => endIterations++,
-                update: () => updateIterations++,
-                optionalStart: () => optionalStartIterations++,
-                optionalEnd: () => optionalEndIterations++,
-                optionalUpdate: () => optionalUpdateIterations++
-            );
+    [TestMethod]
+    public void AllConstructor()
+    {
+        var startIterations = 0;
+        var endIterations = 0;
+        var updateIterations = 0;
+        var optionalStartIterations = 0;
+        var optionalEndIterations = 0;
+        var optionalUpdateIterations = 0;
+        var group = new StateGroup
+        (
+            start: () => startIterations++,
+            end: () => endIterations++,
+            update: () => updateIterations++,
+            optionalStart: () => optionalStartIterations++,
+            optionalEnd: () => optionalEndIterations++,
+            optionalUpdate: () => optionalUpdateIterations++
+        );
 
-            group.Start();
-            group.Update();
-            group.End();
+        group.Start();
+        group.Update();
+        group.End();
 
-            Assert.AreEqual(1, startIterations);
-            Assert.AreEqual(1, endIterations);
-            Assert.AreEqual(1, updateIterations);
-            Assert.AreEqual(1, optionalStartIterations);
-            Assert.AreEqual(1, optionalEndIterations);
-            Assert.AreEqual(1, optionalUpdateIterations);
-        }
+        Assert.AreEqual(1, startIterations);
+        Assert.AreEqual(1, endIterations);
+        Assert.AreEqual(1, updateIterations);
+        Assert.AreEqual(1, optionalStartIterations);
+        Assert.AreEqual(1, optionalEndIterations);
+        Assert.AreEqual(1, optionalUpdateIterations);
     }
 }

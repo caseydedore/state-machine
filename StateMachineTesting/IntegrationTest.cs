@@ -1,153 +1,152 @@
 ﻿
-namespace StateMachineTesting
+namespace StateMachineTesting;
+
+[TestClass]
+public class IntegrationTest
 {
-    [TestClass]
-    public class IntegrationTest
+    [TestMethod]
+    public void GroupTransitionSuccess()
     {
-        [TestMethod]
-        public void GroupTransitionSuccess()
-        {
-            var shouldTransition = false;
-            var rootGroup = new TestStateGroup();
-            var startGroup = new TestStateGroup();
-            var destGroup = new TestStateGroup();
-            rootGroup.Entry = startGroup;
-            rootGroup.AddTransition(startGroup, destGroup, () => shouldTransition);
-            var startState = new TestState
-            (
-                update: () => shouldTransition = true
-            );
-            startGroup.Entry = startState;
-            var destState = new TestState();
-            destGroup.Entry = destState;
+        var shouldTransition = false;
+        var rootGroup = new TestStateGroup();
+        var startGroup = new TestStateGroup();
+        var destGroup = new TestStateGroup();
+        rootGroup.Entry = startGroup;
+        rootGroup.AddTransition(startGroup, destGroup, () => shouldTransition);
+        var startState = new TestState
+        (
+            update: () => shouldTransition = true
+        );
+        startGroup.Entry = startState;
+        var destState = new TestState();
+        destGroup.Entry = destState;
 
-            rootGroup.Start();
-            rootGroup.Update();
-            rootGroup.Update();
+        rootGroup.Start();
+        rootGroup.Update();
+        rootGroup.Update();
 
-            Assert.AreEqual(1, startState.StartIterations);
-            Assert.AreEqual(1, startState.UpdateIterations);
-            Assert.AreEqual(1, startState.EndIterations);
-            Assert.AreEqual(1, destState.StartIterations);
-            Assert.AreEqual(1, destState.UpdateIterations);
-        }
+        Assert.AreEqual(1, startState.StartIterations);
+        Assert.AreEqual(1, startState.UpdateIterations);
+        Assert.AreEqual(1, startState.EndIterations);
+        Assert.AreEqual(1, destState.StartIterations);
+        Assert.AreEqual(1, destState.UpdateIterations);
+    }
 
-        [TestMethod]
-        public void GroupTransitionSuccessNextStateFollow()
-        {
-            var shouldTransition = false;
-            var rootGroup = new TestStateGroup();
-            var startGroup = new TestStateGroup();
-            var destGroup = new TestStateGroup();
-            rootGroup.Entry = startGroup;
-            rootGroup.AddTransition(startGroup, destGroup, () => shouldTransition);
-            var startState = new TestState
-            (
-                update: () => shouldTransition = true
-            );
-            startGroup.Entry = startState;
-            var destState = new TestState();
-            destGroup.Entry = destState;
+    [TestMethod]
+    public void GroupTransitionSuccessNextStateFollow()
+    {
+        var shouldTransition = false;
+        var rootGroup = new TestStateGroup();
+        var startGroup = new TestStateGroup();
+        var destGroup = new TestStateGroup();
+        rootGroup.Entry = startGroup;
+        rootGroup.AddTransition(startGroup, destGroup, () => shouldTransition);
+        var startState = new TestState
+        (
+            update: () => shouldTransition = true
+        );
+        startGroup.Entry = startState;
+        var destState = new TestState();
+        destGroup.Entry = destState;
 
-            rootGroup.Start();
-            rootGroup.Update();
-            rootGroup.Update();
-            rootGroup.Update();
+        rootGroup.Start();
+        rootGroup.Update();
+        rootGroup.Update();
+        rootGroup.Update();
 
-            Assert.AreEqual(1, startState.StartIterations);
-            Assert.AreEqual(1, startState.UpdateIterations);
-            Assert.AreEqual(1, startState.EndIterations);
-            Assert.AreEqual(1, destState.StartIterations);
-            Assert.AreEqual(2, destState.UpdateIterations);
-        }
+        Assert.AreEqual(1, startState.StartIterations);
+        Assert.AreEqual(1, startState.UpdateIterations);
+        Assert.AreEqual(1, startState.EndIterations);
+        Assert.AreEqual(1, destState.StartIterations);
+        Assert.AreEqual(2, destState.UpdateIterations);
+    }
 
-        [TestMethod]
-        public void SharedSubstate()
-        {
-            var root = new TestStateGroup();
-            var start = new TestStateGroup();
-            var dest = new TestStateGroup();
-            root.Entry = start;
-            var willTransition = false;
-            root.AddTransition(start, dest, () => willTransition);
-            var sharedSubstate = new TestState();
-            start.Entry = sharedSubstate;
-            dest.Entry = sharedSubstate;
+    [TestMethod]
+    public void SharedSubstate()
+    {
+        var root = new TestStateGroup();
+        var start = new TestStateGroup();
+        var dest = new TestStateGroup();
+        root.Entry = start;
+        var willTransition = false;
+        root.AddTransition(start, dest, () => willTransition);
+        var sharedSubstate = new TestState();
+        start.Entry = sharedSubstate;
+        dest.Entry = sharedSubstate;
 
-            root.Start();
-            root.Update();
-            willTransition = true;
-            root.Update();
-            root.Update();
+        root.Start();
+        root.Update();
+        willTransition = true;
+        root.Update();
+        root.Update();
 
-            Assert.AreEqual(2, sharedSubstate.StartIterations);
-            Assert.AreEqual(2, sharedSubstate.UpdateIterations);
-            Assert.AreEqual(1, sharedSubstate.EndIterations);
-        }
+        Assert.AreEqual(2, sharedSubstate.StartIterations);
+        Assert.AreEqual(2, sharedSubstate.UpdateIterations);
+        Assert.AreEqual(1, sharedSubstate.EndIterations);
+    }
 
-        [TestMethod]
-        public void StateTransitionAfterZero()
-        {
-            var root = new TestStateGroup();
-            var first = new TestState();
-            var second = new TestState();
-            root.Entry = first;
-            root.AddTransitionAfter(0, first, second);
+    [TestMethod]
+    public void StateTransitionAfterZero()
+    {
+        var root = new TestStateGroup();
+        var first = new TestState();
+        var second = new TestState();
+        root.Entry = first;
+        root.AddTransitionAfter(0, first, second);
 
-            root.Start();
-            root.Update();
-            root.Update();
+        root.Start();
+        root.Update();
+        root.Update();
 
-            Assert.AreEqual(1, first.StartIterations);
-            Assert.AreEqual(1, first.UpdateIterations);
-            Assert.AreEqual(1, first.EndIterations);
-            Assert.AreEqual(1, second.StartIterations);
-            Assert.AreEqual(1, second.UpdateIterations);
-        }
+        Assert.AreEqual(1, first.StartIterations);
+        Assert.AreEqual(1, first.UpdateIterations);
+        Assert.AreEqual(1, first.EndIterations);
+        Assert.AreEqual(1, second.StartIterations);
+        Assert.AreEqual(1, second.UpdateIterations);
+    }
 
-        [TestMethod]
-        public void StateTransitionAfterOne()
-        {
-            var root = new TestStateGroup();
-            var first = new TestState();
-            var second = new TestState();
-            root.Entry = first;
-            root.AddTransitionAfter(1, first, second);
+    [TestMethod]
+    public void StateTransitionAfterOne()
+    {
+        var root = new TestStateGroup();
+        var first = new TestState();
+        var second = new TestState();
+        root.Entry = first;
+        root.AddTransitionAfter(1, first, second);
 
-            root.Start();
-            root.Update();
-            root.Update();
+        root.Start();
+        root.Update();
+        root.Update();
 
-            Assert.AreEqual(1, first.StartIterations);
-            Assert.AreEqual(1, first.UpdateIterations);
-            Assert.AreEqual(1, first.EndIterations);
-            Assert.AreEqual(1, second.StartIterations);
-            Assert.AreEqual(1, second.UpdateIterations);
-        }
+        Assert.AreEqual(1, first.StartIterations);
+        Assert.AreEqual(1, first.UpdateIterations);
+        Assert.AreEqual(1, first.EndIterations);
+        Assert.AreEqual(1, second.StartIterations);
+        Assert.AreEqual(1, second.UpdateIterations);
+    }
 
-        [TestMethod]
-        public void StateTransitionAfterBackAndForth()
-        {
-            var root = new TestStateGroup();
-            var first = new TestState();
-            var second = new TestState();
-            root.Entry = first;
-            root.AddTransitionAfter(1, first, second);
-            root.AddTransitionAfter(1, second, first);
+    [TestMethod]
+    public void StateTransitionAfterBackAndForth()
+    {
+        var root = new TestStateGroup();
+        var first = new TestState();
+        var second = new TestState();
+        root.Entry = first;
+        root.AddTransitionAfter(1, first, second);
+        root.AddTransitionAfter(1, second, first);
 
-            root.Start();
-            root.Update();
-            root.Update();
-            root.Update();
-            root.Update();
-            root.Update();
+        root.Start();
+        root.Update();
+        root.Update();
+        root.Update();
+        root.Update();
+        root.Update();
 
-            Assert.AreEqual(3, first.StartIterations);
-            Assert.AreEqual(3, first.UpdateIterations);
-            Assert.AreEqual(3, first.EndIterations);
-            Assert.AreEqual(2, second.StartIterations);
-            Assert.AreEqual(2, second.UpdateIterations);
-            Assert.AreEqual(2, second.EndIterations);
-        }
+        Assert.AreEqual(3, first.StartIterations);
+        Assert.AreEqual(3, first.UpdateIterations);
+        Assert.AreEqual(3, first.EndIterations);
+        Assert.AreEqual(2, second.StartIterations);
+        Assert.AreEqual(2, second.UpdateIterations);
+        Assert.AreEqual(2, second.EndIterations);
     }
 }
