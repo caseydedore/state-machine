@@ -151,6 +151,22 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
+        public void TransitionPreventsStateOptionalEnd()
+        {
+            var root = new TestStateGroup();
+            var state = new TestState();
+            var dest = new TestState();
+            root.Entry = state;
+            root.AddTransition(() => true, state, dest);
+
+            root.Start();
+            root.Update();
+
+            Assert.AreEqual(1, state.EndIterations);
+            Assert.AreEqual(0, state.OptionalEndIterations);
+        }
+
+        [TestMethod]
         public void TransitionBackAndForth()
         {
             var shouldTransition = false;
@@ -230,7 +246,7 @@ namespace StateMachineTesting
         }
 
         [TestMethod]
-        public void TransitionPreventsSubstateEvents()
+        public void GroupTransitionPreventsSubstateEvents()
         {
             var root = new TestStateGroup();
             var group = new TestStateGroup();
