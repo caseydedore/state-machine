@@ -7,6 +7,7 @@ namespace StateMachine.Core
         IState? nextState;
         uint currentStateIterations = 0;
         List<StateTransition> Transitions { get; set; } = [];
+        IState Any { get; } = new State();
 
         public StateGroup
         (
@@ -100,6 +101,24 @@ namespace StateMachine.Core
 
         public void AddTransition(StateTransition transition) => Transitions.Add(transition);
 
+        public void AddAnyTransitionAfter(uint numberOfUpdates, IState to)
+        {
+            var transition = new StateTransition(numberOfUpdates, Any, to);
+            AddTransition(transition);
+        }
+
+        public void AddAnyTransitionAfter(uint numberOfUpdates, Func<bool> checkCondition, IState to)
+        {
+            var transition = new StateTransition(numberOfUpdates, checkCondition, Any, to);
+            AddTransition(transition);
+        }
+
+        public void AddAnyTransition(Func<bool> checkCondition, IState to)
+        {
+            var transition = new StateTransition(checkCondition, Any, to);
+            AddTransition(transition);
+        }
+
         StateTransition? GetFirstSuccessfulTransition() =>
             Transitions
                 .Where(t => ReferenceEquals(t.From, currentState))
@@ -121,7 +140,5 @@ namespace StateMachine.Core
                 .FirstOrDefault();
 
         public IState? Entry { get; set; }
-
-        public IState Any { get; } = new State();
     }
 }

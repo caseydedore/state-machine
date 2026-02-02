@@ -10,7 +10,7 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var start = new TestState();
             var attemptedDestination = new TestState();
-            group.AddTransition(() => false, group.Any, attemptedDestination);
+            group.AddAnyTransition(() => false, attemptedDestination);
             group.Entry = start;
 
             group.Start();
@@ -25,7 +25,7 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var start = new TestState();
             var destination = new TestState();
-            group.AddTransition(() => true, group.Any, destination);
+            group.AddAnyTransition(() => true, destination);
             group.Entry = start;
 
             group.Start();
@@ -42,7 +42,7 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var start = new TestState();
             var destination = new TestState();
-            group.AddTransition(() => true, group.Any, destination);
+            group.AddAnyTransition(() => true, destination);
             group.Entry = start;
 
             group.Start();
@@ -61,7 +61,7 @@ namespace StateMachineTesting
             var destination = new TestState();
             var anyDestination = new TestState();
             group.AddTransition(() => true, start, destination);
-            group.AddTransition(() => true, group.Any, anyDestination);
+            group.AddAnyTransition(() => true, anyDestination);
             group.Entry = start;
 
             group.Start();
@@ -79,8 +79,8 @@ namespace StateMachineTesting
             var start = new TestState();
             var second = new TestState();
             var destination = new TestState();
-            group.AddTransition(() => false, group.Any, second);
-            group.AddTransition(() => true, group.Any, destination);
+            group.AddAnyTransition(() => false, second);
+            group.AddAnyTransition(() => true, destination);
             group.Entry = start;
 
             group.Start();
