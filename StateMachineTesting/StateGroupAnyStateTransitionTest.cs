@@ -10,7 +10,7 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var start = new TestState();
             var attemptedDestination = new TestState();
-            group.AddAnyTransition(() => false, attemptedDestination);
+            group.AddAnyTransition(attemptedDestination, () => false);
             group.Entry = start;
 
             group.Start();
@@ -25,7 +25,7 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var start = new TestState();
             var destination = new TestState();
-            group.AddAnyTransition(() => true, destination);
+            group.AddAnyTransition(destination, () => true);
             group.Entry = start;
 
             group.Start();
@@ -42,7 +42,7 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var start = new TestState();
             var destination = new TestState();
-            group.AddAnyTransition(() => true, destination);
+            group.AddAnyTransition(destination, () => true);
             group.Entry = start;
 
             group.Start();
@@ -60,8 +60,8 @@ namespace StateMachineTesting
             var start = new TestState();
             var destination = new TestState();
             var anyDestination = new TestState();
-            group.AddTransition(() => true, start, destination);
-            group.AddAnyTransition(() => true, anyDestination);
+            group.AddTransition(start, destination, () => true);
+            group.AddAnyTransition(anyDestination, () => true);
             group.Entry = start;
 
             group.Start();
@@ -79,8 +79,8 @@ namespace StateMachineTesting
             var start = new TestState();
             var second = new TestState();
             var destination = new TestState();
-            group.AddAnyTransition(() => false, second);
-            group.AddAnyTransition(() => true, destination);
+            group.AddAnyTransition(second, () => false);
+            group.AddAnyTransition(destination, () => true);
             group.Entry = start;
 
             group.Start();

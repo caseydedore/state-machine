@@ -87,15 +87,15 @@ namespace StateMachine.Core
             AddTransition(transition);
         }
 
-        public void AddTransitionAfter(uint numberOfUpdates, Func<bool> checkCondition, IState from, IState to)
+        public void AddTransitionAfter(uint numberOfUpdates, IState from, IState to, Func<bool> condition)
         {
-            var transition = new StateTransition(numberOfUpdates, checkCondition, from, to);
+            var transition = new StateTransition(numberOfUpdates, from, to, condition);
             AddTransition(transition);
         }
 
-        public void AddTransition(Func<bool> checkCondition, IState from, IState to)
+        public void AddTransition(IState from, IState to, Func<bool> condition)
         {
-            var transition = new StateTransition(checkCondition, from, to);
+            var transition = new StateTransition(from, to, condition);
             AddTransition(transition);
         }
 
@@ -107,15 +107,15 @@ namespace StateMachine.Core
             AddTransition(transition);
         }
 
-        public void AddAnyTransitionAfter(uint numberOfUpdates, Func<bool> checkCondition, IState to)
+        public void AddAnyTransitionAfter(uint numberOfUpdates, IState to, Func<bool> condition)
         {
-            var transition = new StateTransition(numberOfUpdates, checkCondition, Any, to);
+            var transition = new StateTransition(numberOfUpdates, Any, to, condition);
             AddTransition(transition);
         }
 
-        public void AddAnyTransition(Func<bool> checkCondition, IState to)
+        public void AddAnyTransition(IState to, Func<bool> condition)
         {
-            var transition = new StateTransition(checkCondition, Any, to);
+            var transition = new StateTransition(Any, to, condition);
             AddTransition(transition);
         }
 

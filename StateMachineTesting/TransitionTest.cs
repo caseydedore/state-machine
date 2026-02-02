@@ -12,14 +12,10 @@ namespace StateMachineTesting
             var root = new StateGroup();
             var state = new TestState();
             var didCheckTransition = false;
-            var transition = new StateTransition(() =>
-            {
+            var transition = new StateTransition(state, state, () => {
                 didCheckTransition = true;
                 return true;
-            },
-                state,
-                state
-            );
+            });
             root.AddTransition(transition);
             root.Entry = state;
 
@@ -35,7 +31,7 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var first = new TestState();
             var next = new TestState();
-            group.AddTransition(() => true, first, next);
+            group.AddTransition(first, next, () => true);
             group.Entry = first;
 
             group.Start();
@@ -57,7 +53,7 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var first = new TestState();
             var next = new TestState();
-            group.AddTransition(() => true, first, next);
+            group.AddTransition(first, next, () => true);
             group.Entry = first;
 
             group.Start();
@@ -77,7 +73,7 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var first = new TestState();
             var next = new TestState();
-            group.AddTransition(() => false, first, next);
+            group.AddTransition(first, next, () => false);
             group.Entry = first;
 
             group.Start();
@@ -93,7 +89,7 @@ namespace StateMachineTesting
             var group = new TestStateGroup();
             var first = new TestState();
             var next = new TestState();
-            group.AddTransition(() => false, first, next);
+            group.AddTransition(first, next, () => false);
             group.Entry = first;
 
             group.Start();
@@ -115,8 +111,8 @@ namespace StateMachineTesting
             var start = new TestState();
             var destination = new TestState();
             var secondDestination = new TestState();
-            group.AddTransition(() => true, start, destination);
-            group.AddTransition(() => false, start, secondDestination);
+            group.AddTransition(start, destination, () => true);
+            group.AddTransition(start, secondDestination, () => false);
             group.Entry = start;
 
             group.Start();
@@ -136,8 +132,8 @@ namespace StateMachineTesting
             var start = new TestState();
             var attemptedDestination = new TestState();
             var destination = new TestState();
-            group.AddTransition(() => false, start, attemptedDestination);
-            group.AddTransition(() => true, start, destination);
+            group.AddTransition(start, attemptedDestination, () => false);
+            group.AddTransition(start, destination, () => true);
             group.Entry = start;
 
             group.Start();
@@ -157,7 +153,7 @@ namespace StateMachineTesting
             var state = new TestState();
             var dest = new TestState();
             root.Entry = state;
-            root.AddTransition(() => true, state, dest);
+            root.AddTransition(state, dest, () => true);
 
             root.Start();
             root.Update();
@@ -181,8 +177,8 @@ namespace StateMachineTesting
                 update: () => shouldTransition = true,
                 end: () => shouldTransition = false
             );
-            group.AddTransition(() => shouldTransition, first, second);
-            group.AddTransition(() => shouldTransition, second, first);
+            group.AddTransition(first, second, () => shouldTransition);
+            group.AddTransition(second, first, () => shouldTransition);
             group.Entry = first;
 
             group.Start();
@@ -212,8 +208,8 @@ namespace StateMachineTesting
             var first = new TestState();
             var destination = new TestState();
             var lastDestination = new TestState();
-            group.AddTransition(() => true, first, destination);
-            group.AddTransition(() => true, first, lastDestination);
+            group.AddTransition(first, destination, () => true);
+            group.AddTransition(first, lastDestination, () => true);
             group.Entry = first;
 
             group.Start();
@@ -233,7 +229,7 @@ namespace StateMachineTesting
             var state = new TestState();
             var destination = new TestState();
             var willTransitionSucceed = false;
-            group.AddTransition(() => willTransitionSucceed, state, destination);
+            group.AddTransition(state, destination, () => willTransitionSucceed);
             group.Entry = state;
 
             group.Start();
@@ -253,7 +249,7 @@ namespace StateMachineTesting
             var destGroup = new TestStateGroup();
             var state = new TestState();
             group.Entry = state;
-            root.AddTransition(() => true, group, destGroup);
+            root.AddTransition(group, destGroup, () => true);
             root.Entry = group;
 
             root.Start();
@@ -279,8 +275,8 @@ namespace StateMachineTesting
                 didSecondEvaluate = true;
                 return true;
             }
-            group.AddTransition(() => true, state, stateDest);
-            group.AddTransition(secondTransitionShouldNotEvaluate, state, stateDest);
+            group.AddTransition(state, stateDest, () => true);
+            group.AddTransition(state, stateDest, secondTransitionShouldNotEvaluate);
             group.Entry = state;
 
             group.Start();

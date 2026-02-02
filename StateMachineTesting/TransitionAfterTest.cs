@@ -66,7 +66,7 @@ namespace StateMachineTesting
             var root = new TestStateGroup();
             var state = new TestState();
             var nextState = new TestState();
-            root.AddTransitionAfter(0, () => true, state, nextState);
+            root.AddTransitionAfter(0, state, nextState, () => true);
             root.Entry = state;
 
             root.Start();
@@ -85,7 +85,7 @@ namespace StateMachineTesting
             var root = new TestStateGroup();
             var state = new TestState();
             var nextState = new TestState();
-            root.AddTransitionAfter(0, () => false, state, nextState);
+            root.AddTransitionAfter(0, state, nextState, () => false);
             root.Entry = state;
 
             root.Start();
@@ -104,7 +104,7 @@ namespace StateMachineTesting
             var root = new TestStateGroup();
             var state = new TestState();
             var nextState = new TestState();
-            root.AddTransitionAfter(1, () => true, state, nextState);
+            root.AddTransitionAfter(1, state, nextState, () => true);
             root.Entry = state;
 
             root.Start();
@@ -123,7 +123,7 @@ namespace StateMachineTesting
             var root = new TestStateGroup();
             var state = new TestState();
             var nextState = new TestState();
-            root.AddTransitionAfter(1, () => false, state, nextState);
+            root.AddTransitionAfter(1, state, nextState, () => false);
             root.Entry = state;
 
             root.Start();

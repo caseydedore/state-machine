@@ -12,7 +12,7 @@ namespace StateMachineTesting
             var startGroup = new TestStateGroup();
             var destGroup = new TestStateGroup();
             rootGroup.Entry = startGroup;
-            rootGroup.AddTransition(() => shouldTransition, startGroup, destGroup);
+            rootGroup.AddTransition(startGroup, destGroup, () => shouldTransition);
             var startState = new TestState
             (
                 update: () => shouldTransition = true
@@ -40,7 +40,7 @@ namespace StateMachineTesting
             var startGroup = new TestStateGroup();
             var destGroup = new TestStateGroup();
             rootGroup.Entry = startGroup;
-            rootGroup.AddTransition(() => shouldTransition, startGroup, destGroup);
+            rootGroup.AddTransition(startGroup, destGroup, () => shouldTransition);
             var startState = new TestState
             (
                 update: () => shouldTransition = true
@@ -69,7 +69,7 @@ namespace StateMachineTesting
             var dest = new TestStateGroup();
             root.Entry = start;
             var willTransition = false;
-            root.AddTransition(() => willTransition, start, dest);
+            root.AddTransition(start, dest, () => willTransition);
             var sharedSubstate = new TestState();
             start.Entry = sharedSubstate;
             dest.Entry = sharedSubstate;

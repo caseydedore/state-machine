@@ -27,8 +27,8 @@ var stateTwo = new State();
 root.Entry = stateOne;
 
 // Setup transitions for the States. Transitions are managed by a parent StateGroup, thus States with transitions always have an implied parent. These conditionals immediately return true and these States will perform a single Update before the StateGroup transitions to the next.
-root.AddTransition(() => true, from: stateOne, to: stateTwo);
-root.AddTransition(() => true, from: stateTwo, to: stateOne);
+root.AddTransition(from: stateOne, to: stateTwo, condition: () => true);
+root.AddTransition(from: stateTwo, to: stateOne, condition: () => true);
 
 // Begin by calling Start on the root. While a StateGroup may exist anywhere in the hierarchy, as root, it requires manual execution.
 root.Start();
