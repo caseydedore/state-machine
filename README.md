@@ -85,8 +85,8 @@ var state = new State(
     optionalEnd: () => {
         // OptionalEnd executes right after End, before the State is deactivated.
         // It will only execute if the parent StateGroup ends it due to a higher priority State change.
-        // For example, a transition succeeds from itself to another.
-        // This never executes if a transition from this State succeeds.
+        // For example, a transition from the parent StateGroup to another.
+        // This never executes if a transition directly from this State succeeds.
     }
 );
 ```
