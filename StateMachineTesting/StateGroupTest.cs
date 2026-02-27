@@ -224,4 +224,27 @@ public class StateGroupTest
 
         Assert.IsTrue(didGroupOptionalUpdateAfterChild);
     }
+
+    [TestMethod]
+    public void ChildStateGroupChildTransition()
+    {
+        var root = new TestStateGroup();
+        var childGroup = new TestStateGroup();
+        var childStartState = new TestState();
+        var childDestState = new TestState();
+        root.Entry = childGroup;
+        childGroup.Entry = childStartState;
+        var shouldTransition = false;
+        childGroup.AddTransition(childStartState, childDestState, () => shouldTransition);
+
+        root.Start();
+        root.Update();
+        shouldTransition = true;
+        root.Update();
+        root.Update();
+
+        Assert.AreEqual(2, childStartState.UpdateIterations);
+        Assert.AreEqual(1, childStartState.EndIterations);
+        Assert.AreEqual(1, childDestState.StartIterations);
+    }
 }
